@@ -1,0 +1,30 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+
+#content{
+	position: relative;
+	top: 40px;
+}
+
+#controls{
+	position:relative;
+	width: 100%;
+	bottom:0;
+	padding: 30px;
+	width: 100%;
+}
+
+#controls p{
+	display: inline;
+	float: left;
+	margin-right: 50px;
+	margin-left: 30px;
+}
+
+h3{
+	padding-bottom: 0;
+	padding-top:10px;
+	margin:0;
+}
