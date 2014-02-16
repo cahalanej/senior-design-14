@@ -53,11 +53,31 @@ $(function(){
         light2.position.set(-2, -1.5, -1);
         scene.add(light2);
 
-        geometry = new THREE.CubeGeometry( 200, 200, 200 );
-        material = new THREE.MeshPhongMaterial( { color: 0x3b3b3b, wireframe: false } );
 
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
+        /*load object */
+        var loader = new THREE.OBJLoader();
+        loader.load("model_mock1.obj", function(geometry){
+            var material = new THREE.MeshPhongMaterial( { color: 0x3b3b3b, wireframe: false } );
+
+            geometry.children.forEach(function(child){
+                if (child.children.length==1){
+                    if (child.children[0] instanceof THREE.Mesh){
+                        child.children[0].material = material;
+                    }
+                }
+            });
+            geometry.scale.set(100,100,100);
+            geometry.rotation.x=-0.3;
+            scene.add(geometry);
+        })
+
+
+
+
+        //geometry = new THREE.CubeGeometry( 200, 200, 200 );
+        //material = 
+       // mesh = new THREE.Mesh( geometry, material );
+       // scene.add( mesh );
 
 		if (window.WebGLRenderingContext){
 			renderer = new THREE.WebGLRenderer({antialias: true});
