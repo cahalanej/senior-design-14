@@ -64,7 +64,7 @@ $(function(){
         scene.add(light2);
 
 
-        material = new THREE.MeshPhongMaterial( { color: 0xbbbbbb } );
+        material = new THREE.MeshLambertMaterial( { color: 0xbbbbbb } );
 
         /*load object */
        
@@ -109,8 +109,28 @@ function loadObject(){
 
           loader.load("head.obj", function(head){
 
+          loader.load("lshoulder.obj", function(lshoulder){
+
+          loader.load("luarm.obj", function(luarm){
+
+          loader.load("lelbow.obj", function(lelbow){
+
+          loader.load("llarm.obj", function(llarm){
+
           neck.children.push(head);
           head.parent = neck;
+
+          lelbow.children.push(llarm);
+          llarm.parent = lelbow;
+
+          luarm.children.push(lelbow);
+          lelbow.parent = luarm;
+
+          lshoulder.children.push(luarm);
+          luarm.parent = lshoulder;
+
+          torso.children.push(lshoulder);
+          lshoulder.parent = torso;
 
           torso.children.push(neck);
           neck.parent = torso;
@@ -123,7 +143,10 @@ function loadObject(){
           
           scene.add(root);
           objects.push(root);
-          
+          });
+        });
+        });
+        });
         });
         });
         });
@@ -284,7 +307,7 @@ function loadObject(){
 if (SELECTED){
         //rotate
    if (cwX){
-          SELECTED.rotateOnAxis(xAxis, -offset);
+SELECTED.rotateOnAxis(xAxis, -offset);
    }else if (ccwX){
        SELECTED.rotateOnAxis(xAxis, offset);
    }else if (cwY){
@@ -333,17 +356,25 @@ console.log(camera._rotation._quaternion);
                       
                         SELECTED.children[0].material = material;
                         SELECTED = intersected[0].object.parent;
-                        SELECTED.children[0].material = new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, opacity: 0.5 } );
+                        SELECTED.children[0].material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff, opacity: 0.5 } );
                       }
                     }
                     else{
                       SELECTED = intersected[0].object.parent;
-                        SELECTED.children[0].material = new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff, opacity: 0.5 } );
+                        SELECTED.children[0].material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff, opacity: 0.5 } );
                       
                     }
                  }
               }}
 
+
+var rotationMatrix;
+function rotateAroundObjectAxis( object, axis, radians ) {
+    rotationMatrix = new THREE.Matrix4();
+    rotationMatrix.makeRotationAxis( axis.normalize(), radians );
+    object.matrix.multiplySelf( rotationMatrix );                       // post-multiply
+    object.rotation.setEulerFromRotationMatrix(object.matrix, object.order);
+}
 
                 function update(){
                   
