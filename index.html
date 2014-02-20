@@ -4,6 +4,7 @@
 	<title>Senior Design</title>
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 	<script src="three.min.js"></script>
+	<script src="orbit-controls.js"></script>
 	<script src="obj-loader.js"></script>
 	<script src="script.js" type="text/javascript"></script>
 
@@ -14,8 +15,9 @@
 	<div id="content"></div>
 
 	<div id="controls">
-		<h3>Camera Controls</h3>
+		<h3>Figure Controls</h3>
 		<p id="camera-trans">
+			move -- only on root </br>
 			a - move left</br>
 			d - move right</br>
 			w - move up</br>
@@ -24,6 +26,7 @@
 			e - zoom in</br>
 		</p>
 		<p id="camera-rotate">
+			rotate selected joint (and it's children) </br>
 			j - rotate counter clockwise about y</br>
 			l - rotate clockwise about y</br>
 			k - rotate counter clockwise about x</br>
@@ -32,8 +35,11 @@
 			o - rotate clockwise about z</br>
 		</p>
 		<p id="camera-type">
-			p - toggle perspective/orthographic</br>
-			*currently orthographic not functioning
+			to select body part, alt-click</br>
+			camera controls:</br>
+			click and drag to rotate</br>
+			trackpad scroll to zoom
+
 		</p>
 
 	</div>
