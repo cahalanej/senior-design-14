@@ -23,12 +23,12 @@ $(function(){
     var perspective = true;
     var view = "front";
     var SELECTED, projector, mouse = {x:0, y:0};
-    var objects = [];
+    var objects = [], joints=[];
     var selectedMaterial;
     var material; 
     var controls; 
     var ALT = false;
-    var root;
+    var root, neck, lshoulder, lelbow;
 
 
     init();
@@ -104,18 +104,43 @@ function loadObject(){
           root.scale.set(1,1,1);
 
           loader.load("torso.obj", function(torso){
+            torso.position.y = 1.681;
 
-          loader.load("neck.obj", function(neck){
+          loader.load("neck.obj", function(necked){
 
           loader.load("head.obj", function(head){
+            head.position.x = -0.009;
+            head.position.y=0.843;
+            head.position.z=0.121;
 
-          loader.load("lshoulder.obj", function(lshoulder){
+          loader.load("lshoulder.obj", function(lshouldered){
 
           loader.load("luarm.obj", function(luarm){
+            luarm.position.x = .612;
+            luarm.position.y = -.547;
+            luarm.position.z=-.185;
 
-          loader.load("lelbow.obj", function(lelbow){
+          loader.load("lelbow.obj", function(lelbowed){
 
           loader.load("llarm.obj", function(llarm){
+            llarm.position.x=.47;
+            llarm.position.y=-.503;
+            llarm.position.z=-.405;
+
+
+            neck = necked;
+            neck.position.y = 1.449;
+            neck.position.z=0.12;
+
+            lshoulder = lshouldered;
+            lshoulder.position.x=1.12;
+            lshoulder.position.y=.845;
+            lshoulder.position.z=.12;
+
+            lelbow=lelbowed;
+            lelbow.position.x=1.076;
+            lelbow.position.y=.555;
+            lelbow.position.z=.213;
 
           neck.children.push(head);
           head.parent = neck;
@@ -141,6 +166,11 @@ function loadObject(){
          // scene.add(torso);
           //objects.push(torso);      
           
+          joints.push(root);
+          joints.push(neck);
+          joints.push(lshoulder);
+          joints.push(lelbow);
+
           scene.add(root);
           objects.push(root);
           });
@@ -266,7 +296,6 @@ function loadObject(){
       break;
     	//toggle perspective
     	case 80:
-    	console.log("perspective: " + perspective);
       if (perspective){
        perspective = false;
 
@@ -306,8 +335,9 @@ function loadObject(){
 }
 if (SELECTED){
         //rotate
+
    if (cwX){
-SELECTED.rotateOnAxis(xAxis, -offset);
+    SELECTED.rotateOnAxis(xAxis, -offset);
    }else if (ccwX){
        SELECTED.rotateOnAxis(xAxis, offset);
    }else if (cwY){
@@ -336,10 +366,8 @@ SELECTED.rotateOnAxis(xAxis, -offset);
 
 
               function onDocumentMouseDown( event ) {
-                console.log(SELECTED);
                 if(ALT == true){
                 event.preventDefault();
-console.log(camera._rotation._quaternion);
                 mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
                 mouse.y = -(event.clientY/$("canvas").height()) *2 +1; 
                //may need to change y to expect the shorter height;
@@ -347,37 +375,46 @@ console.log(camera._rotation._quaternion);
                var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
                   projector.unprojectVector(vector, camera);
                   var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-                  var intersected = ray.intersectObjects(objects, true)
+                  var intersected = ray.intersectObjects(objects, true);
                   
                   if (intersected.length > 0){
-                    //changeColorsRec(intersected[0].object);
+
+                      var joint = contains(joints, intersected);
                     if (SELECTED){
                       if (SELECTED != intersected[0].object.parent){
-                      
+                        if (joint){
                         SELECTED.children[0].material = material;
-                        SELECTED = intersected[0].object.parent;
+                        
+                        SELECTED = joint;
                         SELECTED.children[0].material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff, opacity: 0.5 } );
+                        }
                       }
                     }
                     else{
-                      SELECTED = intersected[0].object.parent;
+                      if (joint){
+                        SELECTED = joint;
                         SELECTED.children[0].material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff, opacity: 0.5 } );
-                      
+                        }
                     }
+
+    console.log(SELECTED);
                  }
-              }}
-
-
-var rotationMatrix;
-function rotateAroundObjectAxis( object, axis, radians ) {
-    rotationMatrix = new THREE.Matrix4();
-    rotationMatrix.makeRotationAxis( axis.normalize(), radians );
-    object.matrix.multiplySelf( rotationMatrix );                       // post-multiply
-    object.rotation.setEulerFromRotationMatrix(object.matrix, object.order);
-}
+              }
+            }
 
                 function update(){
                   
+                }
+
+                function contains(array, obj_array){
+                  for (var i=0; i<array.length; i++){
+                    for(var j=0; j<obj_array.length; j++){
+                      if (array[i] == obj_array[j].object.parent){
+                        return obj_array[j].object.parent;
+                      }
+                    }
+                  } 
+                  return false;
                 }
 });
 
