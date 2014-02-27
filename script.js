@@ -30,6 +30,7 @@ $(function(){
     var ALT = false;
     var root, neck, lshoulder, lelbow;
 
+    var height;
 
     init();
     animate();
@@ -39,7 +40,7 @@ $(function(){
      
       scene = new THREE.Scene();
 
-      var height = (2*window.innerHeight/3);
+      height = window.innerHeight-42;
 
     	//camera
     	//width, height, fov, near, far, orthonear, ortho far
@@ -89,13 +90,24 @@ $(function(){
        /*lets make jquery style*/
        //renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
        renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown);
-
+       window.addEventListener( 'resize', onWindowResize);
        controls = new THREE.OrbitControls( camera, renderer.domElement );
        //renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
         //on keydown set values to true, on keyup, set values to false
         //in function that updates if values true;
       }
 
+
+
+
+function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
 
 function loadObject(){
   var loader = new THREE.OBJLoader();
@@ -369,7 +381,8 @@ if (SELECTED){
                 if(ALT == true){
                 event.preventDefault();
                 mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
-                mouse.y = -(event.clientY/$("canvas").height()) *2 +1; 
+                mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
+                console.log("x: " + mouse.x + ", y: "+ mouse.y);
                //may need to change y to expect the shorter height;
               
                var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
