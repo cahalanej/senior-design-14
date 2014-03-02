@@ -28,7 +28,7 @@ $(function(){
     var material; 
     var controls; 
     var ALT = false;
-    var root, neck, lshoulder, lelbow;
+    var root, neck, lshoulder, lelbow, rshoulder, relbow;
 
     var height;
 
@@ -139,6 +139,22 @@ function loadObject(){
             llarm.position.y=-.503;
             llarm.position.z=-.405;
 
+          loader.load("lshoulder.obj", function(rshouldered){
+
+          loader.load("luarm.obj", function(ruarm){
+            ruarm.position.x = -.612;
+            ruarm.position.y = -.547;
+            ruarm.position.z=-.185;
+            ruarm.scale.x= -1;
+
+          loader.load("lelbow.obj", function(relbowed){
+
+          loader.load("llarm.obj", function(rlarm){
+            rlarm.position.x=-.47;
+            rlarm.position.y=-.503;
+            rlarm.position.z=-.405;
+            rlarm.scale.x= -1;
+
 
             neck = necked;
             neck.position.y = 1.449;
@@ -154,8 +170,32 @@ function loadObject(){
             lelbow.position.y=.555;
             lelbow.position.z=.213;
 
+            rshoulder = rshouldered;
+            rshoulder.position.x=-1.12;
+            rshoulder.position.y=.845;
+            rshoulder.position.z=.12;
+            rshoulder.scale.x= 1;
+
+            relbow=relbowed;
+            relbow.position.x=1.076;
+            relbow.position.y=.555;
+            relbow.position.z=.213;
+            relbow.scale.x= -1;
+
           neck.children.push(head);
           head.parent = neck;
+
+        relbow.children.push(rlarm);
+          rlarm.parent = relbow;
+
+          ruarm.children.push(relbow);
+          relbow.parent = ruarm;
+
+          rshoulder.children.push(ruarm);
+          ruarm.parent = rshoulder;
+
+          torso.children.push(rshoulder);
+          rshoulder.parent = torso;
 
           lelbow.children.push(llarm);
           llarm.parent = lelbow;
@@ -182,10 +222,16 @@ function loadObject(){
           joints.push(neck);
           joints.push(lshoulder);
           joints.push(lelbow);
+          joints.push(rshoulder);
+          joints.push(relbow);
 
           scene.add(root);
           objects.push(root);
           });
+        });
+        });
+        });
+        });
         });
         });
         });
