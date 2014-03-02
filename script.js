@@ -143,17 +143,19 @@ function loadObject(){
 
           loader.load("luarm.obj", function(ruarm){
             ruarm.position.x = -.612;
-            ruarm.position.y = -.547;
+            ruarm.position.y = .547;
             ruarm.position.z=-.185;
             ruarm.scale.x= -1;
+            ruarm.scale.y=-1;
 
           loader.load("lelbow.obj", function(relbowed){
 
           loader.load("llarm.obj", function(rlarm){
             rlarm.position.x=-.47;
-            rlarm.position.y=-.503;
+            rlarm.position.y=.503;
             rlarm.position.z=-.405;
             rlarm.scale.x= -1;
+            rlarm.scale.y = -1;
 
 
             neck = necked;
@@ -181,6 +183,8 @@ function loadObject(){
             relbow.position.y=.555;
             relbow.position.z=.213;
             relbow.scale.x= -1;
+            relbow.scale.y= -1;
+
 
           neck.children.push(head);
           head.parent = neck;
