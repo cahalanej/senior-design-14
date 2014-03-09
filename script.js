@@ -28,7 +28,7 @@ $(function(){
     var material; 
     var controls; 
     var ALT = false;
-    var root, neck, lshoulder, lelbow, rshoulder, relbow;
+    var root, neck, lshoulder, lelbow, rshoulder, relbow, pelvis, lhip, luleg, lknee, llleg, rhip, ruleg, rknee, rlleg;
 
     var height;
 
@@ -157,6 +157,43 @@ function loadObject(){
             rlarm.scale.x= -1;
             rlarm.scale.y = -1;
 
+            loader.load("pelvis.obj", function(pelvis){
+            pelvis.position.x=.019;
+            pelvis.position.y=-.66;
+            pelvis.position.z=.035;
+
+            loader.load("lhip.obj", function(lhip){
+
+            loader.load("lhip.obj", function(rhip){
+
+            loader.load("luleg.obj", function(luleg){
+              luleg.position.x=.643;
+              luleg.position.y=-.635;
+              luleg.position.z=-.215;
+
+            loader.load("luleg.obj", function(ruleg){
+              ruleg.position.x=-.643;
+              ruleg.position.y=.635;
+              ruleg.position.z=-.215;
+              ruleg.scale.x = -1;
+              ruleg.scale.y = -1;
+
+
+            loader.load("lknee.obj", function(lknee){
+
+            loader.load("lknee.obj", function(rknee){
+  
+            loader.load("llleg.obj", function(llleg){
+              llleg.position.x=.626;
+              llleg.position.y=-.555;
+              llleg.position.z=-.198;
+
+            loader.load("llleg.obj", function(rlleg){
+              rlleg.position.x=-.626;
+              rlleg.position.y=.555;
+              rlleg.position.z=-.198;
+              rlleg.scale.x = -1;
+              rlleg.scale.y = -1;
 
             neck = necked;
             neck.position.y = 1.449;
@@ -185,11 +222,30 @@ function loadObject(){
             relbow.scale.x= -1;
             relbow.scale.y= -1;
 
+            lhip.position.x=.459;
+            lhip.position.y=-.738;
+            lhip.position.z=-.059;
+
+            rhip.position.x=-.459;
+            rhip.position.y=-.738;
+            rhip.position.z=-.059;
+            rhip.scale.x = -1;
+            rhip.scale.y = -1;
+
+            lknee.position.x=-.63;
+            lknee.position.y=-1.479;
+            lknee.position.z=.206;
+
+            rknee.position.x=-.63;
+            rknee.position.y=-1.479;
+            rknee.position.z=.206;
+            rknee.scale.x = -1;
+            rknee.scale.y = -1;
 
           neck.children.push(head);
           head.parent = neck;
 
-        relbow.children.push(rlarm);
+          relbow.children.push(rlarm);
           rlarm.parent = relbow;
 
           ruarm.children.push(relbow);
@@ -219,9 +275,40 @@ function loadObject(){
           root.children.push(torso);
           torso.parent = root;
 
+          lknee.children.push(llleg);
+          llleg.parent = lknee;
+
+          rknee.children.push(rlleg)
+          rlleg.parent = rknee;
+
+          luleg.children.push(lknee);
+          lknee.parent = luleg;
+
+          ruleg.children.push(rknee)
+          rknee.parent = ruleg;
+
+          lhip.children.push(luleg);
+          luleg.parent = lhip;
+
+          rhip.children.push(ruleg)
+          ruleg.parent = rhip;
+
+          pelvis.children.push(lhip);
+          lhip.parent = pelvis;
+
+          pelvis.children.push(rhip);
+          rhip.parent = pelvis;
+
+          root.children.push(pelvis);
+          pelvis.parent = root;
          // scene.add(torso);
           //objects.push(torso);      
           
+          joints.push(root);
+          joints.push(lhip);
+          joints.push(rhip);
+          joints.push(lknee);
+          joints.push(rknee);
           joints.push(root);
           joints.push(neck);
           joints.push(lshoulder);
@@ -231,7 +318,17 @@ function loadObject(){
 
           scene.add(root);
           objects.push(root);
+        
           });
+        });
+        });
+        });
+        });
+        });
+        });
+        });
+        });
+        });
         });
         });
         });
