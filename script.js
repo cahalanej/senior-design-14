@@ -39,7 +39,6 @@ $(function(){
     	//scene
      
       scene = new THREE.Scene();
-
       height = window.innerHeight-42;
 
     	//camera
@@ -73,9 +72,13 @@ $(function(){
 
 
        if (window.WebGLRenderingContext){
+        console.log("before call");
          renderer = new THREE.WebGLRenderer({antialias: true});
+         console.log("after call");
        }else{
+        console.log("before canvas");
          renderer = new THREE.CanvasRenderer();
+         console.log("canvas render");
        }
        renderer.setSize(window.innerWidth, height );
        $("#content").html( renderer.domElement );
@@ -162,6 +165,9 @@ function loadObject(){
             pelvis.position.y=-.66;
             pelvis.position.z=.035;
 
+            root.position.y = .67;
+            root.position.x= 0;//-1.503;
+
             loader.load("lhip.obj", function(lhip){
 
             loader.load("lhip.obj", function(rhip){
@@ -198,22 +204,27 @@ function loadObject(){
             neck = necked;
             neck.position.y = 1.449;
             neck.position.z=0.12;
+            neck.name = "neck";
 
             lshoulder = lshouldered;
             lshoulder.position.x=1.12;
             lshoulder.position.y=.845;
             lshoulder.position.z=.12;
+            lshoulder.name = "shoulder";
 
             lelbow=lelbowed;
             lelbow.position.x=1.076;
             lelbow.position.y=.555;
             lelbow.position.z=.213;
+            lelbow.scale.y = -1;
+            lelbow.name= "lelbow";
 
             rshoulder = rshouldered;
             rshoulder.position.x=-1.12;
             rshoulder.position.y=.845;
             rshoulder.position.z=.12;
             rshoulder.scale.x= 1;
+            rshoulder.name = "rshoulder";
 
             relbow=relbowed;
             relbow.position.x=1.076;
@@ -221,26 +232,31 @@ function loadObject(){
             relbow.position.z=.213;
             relbow.scale.x= -1;
             relbow.scale.y= -1;
+            relbow.name ="relbow";
 
             lhip.position.x=.459;
             lhip.position.y=-.738;
             lhip.position.z=-.059;
+            lhip.name = "lhip";
 
             rhip.position.x=-.459;
             rhip.position.y=-.738;
             rhip.position.z=-.059;
             rhip.scale.x = -1;
             rhip.scale.y = -1;
+            rhip.name = "rhip";
 
             lknee.position.x=-.63;
             lknee.position.y=-1.479;
             lknee.position.z=.206;
+            lknee.name = "lknee";
 
             rknee.position.x=-.63;
             rknee.position.y=-1.479;
             rknee.position.z=.206;
             rknee.scale.x = -1;
             rknee.scale.y = -1;
+            rknee.name = "rknee";
 
           neck.children.push(head);
           head.parent = neck;
@@ -299,8 +315,8 @@ function loadObject(){
           pelvis.children.push(rhip);
           rhip.parent = pelvis;
 
-          root.children.push(pelvis);
-          pelvis.parent = root;
+          root.parent=pelvis;
+          pelvis.children.push(root);
          // scene.add(torso);
           //objects.push(torso);      
           
@@ -316,8 +332,8 @@ function loadObject(){
           joints.push(rshoulder);
           joints.push(relbow);
 
-          scene.add(root);
-          objects.push(root);
+          scene.add(pelvis);
+          objects.push(pelvis);
         
           });
         });
@@ -497,16 +513,50 @@ if (SELECTED){
 
    if (cwX){
     SELECTED.rotateOnAxis(xAxis, -offset);
+    if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
+      if (SELECTED._rotation._x < (-5*degToRad)){
+        SELECTED.rotateOnAxis(xAxis, +offset);              
+      }
+    }
    }else if (ccwX){
        SELECTED.rotateOnAxis(xAxis, offset);
+       if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
+        if (SELECTED._rotation._x > (150*degToRad)){
+          SELECTED.rotateOnAxis(xAxis, -offset);              
+        }
+      }
    }else if (cwY){
-       SELECTED.rotateOnAxis(yAxis, offset);
+      if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
+       }else{  
+        SELECTED.rotateOnAxis(yAxis, offset);
+         if (SELECTED.name == "lelbow" || SELECTED.name == "relbow"){
+       if (SELECTED._rotation._y > (10*degToRad)){
+          SELECTED.rotateOnAxis(yAxis, -offset);              
+        }
+      }
+      }
    }else if (ccwY){
-       SELECTED.rotateOnAxis(yAxis, -offset);
+    if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
+      }else{  
+        console.log(SELECTED.rotation);
+        SELECTED.rotateOnAxis(yAxis, -offset);
+        if (SELECTED.name == "lelbow" || SELECTED.name == "relbow"){
+        if (SELECTED._rotation._y < (-90*degToRad)){
+          console.log("do I even get here");
+          SELECTED.rotateOnAxis(yAxis, offset);              
+        }
+      }
+      }
    }else if (cwZ){
-       SELECTED.rotateOnAxis(zAxis, -offset);
+      if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
+      }else{  
+        SELECTED.rotateOnAxis(zAxis, -offset);
+      }
    }else if (ccwZ){
-      SELECTED.rotateOnAxis(zAxis, offset);
+    if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
+      }else{  
+        SELECTED.rotateOnAxis(zAxis, offset);
+      }
    }
    if (SELECTED._rotation._quaternion._y/degToRad >= 360){
             SELECTED._rotation._quaternion._y=0;
