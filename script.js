@@ -512,18 +512,23 @@ if (SELECTED){
         //rotate
 
    if (cwX){
+    if (SELECTED.name == "lelbow" || SELECTED.name == "relbow"){
+       }else{  
     SELECTED.rotateOnAxis(xAxis, -offset);
     if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
       if (SELECTED._rotation._x < (-5*degToRad)){
         SELECTED.rotateOnAxis(xAxis, +offset);              
       }
     }
+  }
    }else if (ccwX){
+    if (SELECTED.name == "lelbow" || SELECTED.name == "relbow"){
+       }else{  
        SELECTED.rotateOnAxis(xAxis, offset);
        if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
         if (SELECTED._rotation._x > (150*degToRad)){
           SELECTED.rotateOnAxis(xAxis, -offset);              
-        }
+        }}
       }
    }else if (cwY){
       if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
@@ -548,12 +553,12 @@ if (SELECTED){
       }
       }
    }else if (cwZ){
-      if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
+      if (SELECTED.name == "lknee" || SELECTED.name == "rknee" || SELECTED.name == "lelbow" || SELECTED.name == "relbow"){
       }else{  
         SELECTED.rotateOnAxis(zAxis, -offset);
       }
    }else if (ccwZ){
-    if (SELECTED.name == "lknee" || SELECTED.name == "rknee"){
+    if (SELECTED.name == "lknee" || SELECTED.name == "rknee"|| SELECTED.name == "lelbow" || SELECTED.name == "relbow"){
       }else{  
         SELECTED.rotateOnAxis(zAxis, offset);
       }
