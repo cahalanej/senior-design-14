@@ -76,6 +76,32 @@ li img{
 	text-shadow: 0 1px 0 #282828;
 }
 
+li p{
+	position: relative;
+	display: inline;
+	padding: 5px;
+	top: 11px;
+}
+
+li input{
+	width: 50px;
+}
+
+.nav button{
+	position: relative;
+	top: 11px;
+}
+
+.right{
+	float: right;
+	margin-right: 20px;
+}
+
+.left{
+	float: left;
+}
+
+
 #content{
 	position: absolute;
 	top: 42px;

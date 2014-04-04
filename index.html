@@ -6,6 +6,9 @@
 	<script src="three.min.js"></script>
 	<script src="orbit-controls.js"></script>
 	<script src="obj-loader.js"></script>
+
+	<script src="ui-script.js" type="text/javascript"></script>
+	<script src="file-loader.js" type="text/javascript"></script>
 	<script src="script.js" type="text/javascript"></script>
 
 	<link rel="stylesheet" type="text/css" href="style.css">
@@ -47,6 +50,28 @@
 					</li>
 				</ul>
 			</li>
+			<div class="right">
+				<div class="left">
+					<li>
+						<button id="gender">toggle gender of model</button>
+					</li>
+					<li>
+						<p>current Joint:<p id="joint" class="display">none</p></p>
+					</li>
+					<li>
+						<p>x:<input type="text" id="x-rot" class="rot display" placeholder="n/a"></input></p>
+					</li>
+					<li>
+						<p>y:<input type="text" id="y-rot" class="rot display" placeholder="n/a"></input></p>
+					</li>
+					<li>
+						<p>z:<input type="text" id="z-rot" class="rot display" placeholder="n/a"></input></p>
+					</li>
+					<li>
+						<button id="select-root">select entire body</button>
+					</li>
+				</div>
+			</div>
 		</ul>
 	</div>
 
