@@ -2,6 +2,7 @@ var SELECTED, LAST_SELECTED=0;
 var degToRad = 3.14/180.0;
 
 function toggleRoot(){
+  var material = new THREE.MeshLambertMaterial( { color: 0xbbbbbb } );
     if (SELECTED && SELECTED.name == "root"){
       SELECTED.children[0].material = material;
       
@@ -11,7 +12,7 @@ function toggleRoot(){
         console.log(SELECTED);
         if (SELECTED){
           SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-          { color: 676767, opacity: 0.75 } ); 
+          { color: 0x676767, opacity: 0.75 } ); 
         }
       }else{
        SELECTED = null;

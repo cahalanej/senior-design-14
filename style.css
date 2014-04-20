@@ -79,8 +79,8 @@ li img{
 li p{
 	position: relative;
 	display: inline;
-	padding: 5px;
-	top: 11px;
+	padding: 5px 10px;
+	top: 0px;
 }
 
 li input{
@@ -89,7 +89,19 @@ li input{
 
 .nav button{
 	position: relative;
-	top: 11px;
+	top: 0px;
+	position: inline;
+}
+
+.buttons{
+	position: absolute;
+	margin-left: -90px;
+}
+
+.buttons button{
+	height: 12px;
+	width: 35px;
+	line-height: 12px;
 }
 
 .right{

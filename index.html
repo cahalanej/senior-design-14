@@ -53,19 +53,36 @@
 			<div class="right">
 				<div class="left">
 					<li>
-						<button id="gender">toggle gender of model</button>
+							<input type="radio" class="ik_fk" name="ik_fk" value="fk">FK</input>
+							<input type="radio" class="ik_fk" name="ik_fk" value="ik">IK</input>
+					</li>
+					<li>
+					<li>
+						<button id="gender">toggle gender</button>
 					</li>
 					<li>
 						<p>current Joint:<p id="joint" class="display">none</p></p>
 					</li>
 					<li>
 						<p>x:<input type="text" id="x-rot" class="rot display" placeholder="n/a"></input></p>
+						<p class="buttons">
+							<button id="x-back">ccw</button>
+							<button id="x-forward">cw</button>
+						</p>
 					</li>
 					<li>
 						<p>y:<input type="text" id="y-rot" class="rot display" placeholder="n/a"></input></p>
+						<p class="buttons">
+							<button id="y-back">ccw</button>
+							<button id="y-forward">cw</button>
+						</p>
 					</li>
 					<li>
 						<p>z:<input type="text" id="z-rot" class="rot display" placeholder="n/a"></input></p>
+						<p class="buttons">
+							<button id="z-back">ccw</button>
+							<button id="z-forward">cw</button>
+						</p>
 					</li>
 					<li>
 						<button id="select-root">select entire body</button>

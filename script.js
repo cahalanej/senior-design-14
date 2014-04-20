@@ -63,8 +63,9 @@ $(function(){
 
     /*load object */
    
-    loadObject();
-
+    loadMale();
+    loadFemale();
+    loadEffector();
 
     if (window.WebGLRenderingContext){
       console.log("before call");
