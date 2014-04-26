@@ -409,6 +409,5 @@ function loadEffector(){
     effector.children[0].material = new THREE.MeshPhongMaterial( 
       { color: 0x077684, opacity: 1 } ); 
     effector_pt.push(effector);
-    scene.add(effector);
   });
 }

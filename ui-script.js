@@ -1,5 +1,17 @@
 var SELECTED, LAST_SELECTED=0;
+var effector = false
 var degToRad = 3.14/180.0;
+
+
+function toggleIK(e){
+  if(e.target.value == "ik"){
+    scene.add(effector_pt[0]);
+    effector = true;
+  }else{
+    scene.remove(effector_pt[0]);
+    effector = false;
+  }
+}
 
 function toggleRoot(){
   var material = new THREE.MeshLambertMaterial( { color: 0xbbbbbb } );

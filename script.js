@@ -1,6 +1,6 @@
 $(function(){
 	var camera, cameraO, renderer;
-  var geometry, material, mesh;
+  var geometry, material, mesh, plane;
 
   var cameraObject;
 	//translate 
@@ -28,6 +28,8 @@ $(function(){
   var pelvis;
   var male=true;
   var height;
+
+  var effectorSelected = false;
 
   init();
   animate();
@@ -61,6 +63,13 @@ $(function(){
 
     material = new THREE.MeshLambertMaterial( { color: 0xbbbbbb } );
 
+
+    plane = new THREE.Plane();
+    plane.normal.x = 0;
+    plane.normal.y = 0;
+    plane.normal.z = 1;
+    scene.add(plane);
+
     /*load object */
    
     loadMale();
@@ -88,7 +97,9 @@ $(function(){
 
     /*lets make jquery style*/
     //renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown);
+    renderer.domElement.addEventListener( 'mouseup', onDocumentMouseDown);
+
+   //sets variable to false
     window.addEventListener( 'resize', onWindowResize);
     $("#select-root").on('click', function(){
       toggleRoot();
@@ -103,6 +114,9 @@ $(function(){
       $("#z-rot").blur(function(e){
       blurZ(e);
     });
+    $(".ik_fk").click(function(e){
+      toggleIK(e);
+    })
 
       $("#gender").click(function(){
         if (male){
@@ -118,10 +132,19 @@ $(function(){
         }
       })
     controls = new THREE.OrbitControls( camera, renderer.domElement );
-    //renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
+    
+
+    //mouse down sets variable to true if effector clicked
+    //mouse up checks if variable is true, then runs through ik algorithm and 
+    renderer.domElement.addEventListener( 'mousedown', effectorClicked);
+    renderer.domElement.addEventListener("mousemove", effectorMove );
+    
+
     //on keydown set values to true, on keyup, set values to false
     //in function that updates if values true;
   }
+
+  
 
   function onWindowResize(){
 
@@ -469,10 +492,61 @@ $(function(){
 
   }
 
+  function effectorMove(event){
+    if (effectorSelected){
+      event.preventDefault();
+      mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
+      mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
+      //console.log("move x: " + mouse.x + ", move y: "+ mouse.y);
+      var vector = new THREE.Vector3(mouse.x, mouse.y, 0);
+      console.log(camera);
+      projector.unprojectVector( vector, camera );
+      var dir = vector.sub( camera.position ).normalize();
+
+      var distance = - camera.position.z / dir.z;
+
+      var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
+      console.log(pos);
+      var e_pt = effector_pt[0];
+      e_pt.position.x = pos.x;
+      e_pt.position.y = pos.y;
+      e_pt.position.z = pos.z;
+    }
+  }
+
+  function effectorClicked(event){
+    if (effector && ALT){
+      event.preventDefault();
+      mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
+      mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
+      console.log("x: " + mouse.x + ", y: "+ mouse.y);
+
+      var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
+      projector.unprojectVector(vector, camera);
+      var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+      
+      var intersected = ray.intersectObjects(effector_pt, true);
+        
+      if (intersected.length > 0){
+
+        var joint = intersected[0].object.parent;
+        if (joint){
+          joint.children[0].material = new THREE.MeshPhongMaterial( 
+          { color: 0xFF0000, opacity: 1 } ); 
+          effectorSelected = true;
+        }
+      }
+    }
+  }
 
   function onDocumentMouseDown( event ) {
     var joint_selector, object_selector;
-    if(ALT == true){
+    if (effector){
+      effectorSelected = false;
+      effector_pt[0].children[0].material = new THREE.MeshPhongMaterial( 
+      { color: 0x077684, opacity: 1 } ); 
+    }
+    else if(ALT == true){
       event.preventDefault();
       mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
       mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
