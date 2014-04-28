@@ -24,7 +24,7 @@ $(function(){
 
   var selectedMaterial;
   var controls; 
-  var ALT = false;
+
   var pelvis;
   var male=true;
   var height;
@@ -106,13 +106,16 @@ $(function(){
 
     });
     $("#x-rot").blur(function(e){
-      blurX(e);
+      var rotVal = e.target.value * degToRad;
+      blurX(SELECTED, rotVal);
     });
     $("#y-rot").blur(function(e){
-      blurY(e);
+      var rotVal = e.target.value * degToRad;
+      blurY(SELECTED, rotVal);
     });
       $("#z-rot").blur(function(e){
-      blurZ(e);
+      var rotVal = e.target.value * degToRad;
+      blurZ(SELECTED, rotVal);
     });
     $(".ik_fk").click(function(e){
       toggleIK(e);
@@ -131,7 +134,7 @@ $(function(){
           male=true;
         }
       })
-    controls = new THREE.OrbitControls( camera, renderer.domElement );
+    //controls = new THREE.OrbitControls( camera, renderer.domElement );
     
 
     //mouse down sets variable to true if effector clicked
@@ -142,135 +145,19 @@ $(function(){
 
     //on keydown set values to true, on keyup, set values to false
     //in function that updates if values true;
-  }
 
-  
+    $("#info-btn").on("click", function(){
+      toggleInfo();
+    });
+    $("#help-btn").on("click", function(){
+      toggleHelp();
+    });
 
-  function onWindowResize(){
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize( window.innerWidth, window.innerHeight );
-  }
-
-  function keyDown(e){
-    ALT = e.altKey;
-    switch (e.which){
-    	case 87:	//w
-        up = true;
-        break;
-    	case 83: 	//s
-        down = true;
-        break;
-		  case 65:	//a
-        left = true;
-        break;
-    	case 68:	//d
-        right = true;
-        break;
-    	case 81:	//q
-        backward = true;
-        break;
-		  case 69:	//e
-        forward = true;
-        break;
-
-    	//rotate
-    	case 76:	//l -- clockwise about y
-        if (!perspective  && (view == "front" || view == "bottom")){
-          cwY = false;
-        }else {
-          cwY = true;
-        }
-        break;
-		  case 74: //j -- counterClockwise about y
-        if (!perspective  && (view == "front" || view == "bottom")){
-          ccwY = false;
-        }else{
-          ccwY = true;
-        }
-        break;
-    	case 73:	//i -- clockwise about x
-        if (!perspective  && (view == "front" || view == "bottom")){
-          cwX = false;
-        }else{
-          cwX=true;
-        }
-        break; 
-    	case 75:	//k -- counterClockwise about x
-        if (!perspective  && (view == "front" || view == "bottom")){
-          ccwX = false;
-        }else{
-          ccwX = true;
-        }
-        break;
-    	case 85:	//u -- counterClockwise about z
-        ccwZ = true;
-        break;
-    	case 79:	//o -- clockwise about z
-        cwZ = true;
-        break;
-    }
-  }
-
-  function keyUp(e){
-    ALT = e.altKey;
-    switch (e.which){
-    	case 87:	//w
-        up = false;
-        break;
-    	case 83: 	//s
-        down = false;
-        break;
-	   	case 65:	//a
-        left = false;
-        break;
-    	case 68:	//d
-        right = false;
-        break;
-    	case 81:	//q
-        backward = false;
-        break;
-		  case 69:	//e
-        forward = false;
-        break;
-
-    	//rotate
-    	case 76:	//l -- clockwise about y
-        cwY = false;
-        break;
-		  case 74: //j -- counterClockwise about y
-        ccwY = false;
-        break;
-    	case 73:	//i -- clockwise about x
-        cwX = false;
-        break; 
-    	case 75:	//k -- counterClockwise about x
-        ccwX = false;
-        break;
-    	case 85:	//u -- counterClockwise about z
-        ccwZ = false;
-        break;
-    	case 79:	//o -- clockwise about z
-        cwZ = false;
-        break;
-    	//toggle perspective
-    	case 80:
-        if (perspective){
-          perspective = false;
-    			/*let's also change the text in the controls div to alert users
-          that in orthographic mode*/
-        }else{
-          perspective = true;
-    			//change controls div to say perspective
-    		}
-    		break;
-    }
+    onWindowResize();
   }
 
   function animate() {
-    controls.update();
+    //controls.update();
     var xAxis = new THREE.Vector3(1, 0, 0);
     var yAxis = new THREE.Vector3(0, 1, 0);
     var zAxis = new THREE.Vector3(0, 0, 1);
@@ -499,18 +386,66 @@ $(function(){
       mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
       //console.log("move x: " + mouse.x + ", move y: "+ mouse.y);
       var vector = new THREE.Vector3(mouse.x, mouse.y, 0);
-      console.log(camera);
       projector.unprojectVector( vector, camera );
       var dir = vector.sub( camera.position ).normalize();
 
       var distance = - camera.position.z / dir.z;
 
       var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
-      console.log(pos);
       var e_pt = effector_pt[0];
       e_pt.position.x = pos.x;
       e_pt.position.y = pos.y;
       e_pt.position.z = pos.z;
+      var e_pt = effector_pt[0];
+      var point = new THREE.Vector3( e_pt.position.x, e_pt.position.y, e_pt.position.z);
+      ccd(point);
+    }
+  }
+
+  function ccd(effectPoint){
+    if (SELECTED){
+      var selectedPt = new THREE.Vector3(SELECTED.position.x, SELECTED.position.y, SELECTED.position.z);
+        var dist = new THREE.Vector3(effectPoint.x - selectedPt.x, effectPoint.y - selectedPt.y, effectPoint.z - selectedPt.z);
+        
+        
+        if (dist.length() > 0.004){
+         for (var i = 0; i < 10; i++){  
+
+          var curJointID = SELECTED.parent.name;
+          if (curJointID != "root");
+          // curJoint = scene.getObjectById(curJointID, true);
+          var curJoint = SELECTED.parent.parent;
+          while (curJoint.name != "root"){
+            if (curJoint.name == ""){
+              curJoint = curJoint.parent;
+            }else{
+              var curJointPt = new THREE.Vector3(curJoint.position.x, curJoint.position.y, curJoint.position.z);
+
+              var pc = new THREE.Vector3(selectedPt.x - curJointPt.x, selectedPt.y - curJointPt.y, selectedPt.z - curJointPt.z);
+              var pt = new THREE.Vector3(effectPoint.x - curJointPt.x, effectPoint.y - curJointPt.y, effectPoint.z - curJointPt.z);
+              
+              var leftUnitV = new THREE.Vector3(pc.normalize().x, pc.normalize().y, pc.normalize().z);
+              var rightUnitV = new THREE.Vector3(pt.normalize().x, pt.normalize().y, pt.normalize().z);;
+
+              var dot = leftUnitV.dot(rightUnitV);
+              var cross = new THREE.Vector3(leftUnitV.cross(rightUnitV).x, leftUnitV.cross(rightUnitV).y, leftUnitV.cross(rightUnitV).z);
+
+              var theta = Math.acos(dot);
+
+              var xrot = cross.x * theta;
+              var yrot = cross.y * theta;
+              var zrot = cross.z * theta;
+              
+              blurX(curJoint, xrot);
+              blurY(curJoint, yrot);
+              blurZ(curJoint, zrot);
+
+              curJoint = curJoint.parent;
+            }
+          }
+        }
+        // }
+      }
     }
   }
 
@@ -541,12 +476,13 @@ $(function(){
 
   function onDocumentMouseDown( event ) {
     var joint_selector, object_selector;
-    if (effector){
+    if (effectorSelected){
+      
       effectorSelected = false;
       effector_pt[0].children[0].material = new THREE.MeshPhongMaterial( 
       { color: 0x077684, opacity: 1 } ); 
     }
-    else if(ALT == true){
+    else if (ALT == true){
       event.preventDefault();
       mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
       mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
@@ -569,12 +505,14 @@ $(function(){
 
         var joint = contains(joint_selector, intersected);
         if (SELECTED){
+          console.log(SELECTED);
           if (SELECTED != intersected[0].object.parent){
             if (joint){
+
             SELECTED.children[0].material = material;
             SELECTED = joint;
             SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-              { color: 676767, opacity: 0.75 } ); 
+        { color: 0x676767, opacity: 0.75 } ); 
             }
           }
         }
@@ -582,7 +520,7 @@ $(function(){
           if (joint){
             SELECTED = joint;
             SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-              { color: 676767, opacity: 0.75 } );
+        { color: 0x676767, opacity: 0.75 } ); 
           }
         }
       }
@@ -601,6 +539,135 @@ $(function(){
     } 
     return false;
   }
+
+
+  function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+    var infoHeight = window.innerHeight - $(".navbar").height();
+    $(".dropdown").height(infoHeight);
+
+  }
+
+    function keyDown(e){
+    ALT = e.altKey;
+    switch (e.which){
+      case 87:  //w
+        up = true;
+        break;
+      case 83:  //s
+        down = true;
+        break;
+      case 65:  //a
+        left = true;
+        break;
+      case 68:  //d
+        right = true;
+        break;
+      case 81:  //q
+        backward = true;
+        break;
+      case 69:  //e
+        forward = true;
+        break;
+
+      //rotate
+      case 76:  //l -- clockwise about y
+        if (!perspective  && (view == "front" || view == "bottom")){
+          cwY = false;
+        }else {
+          cwY = true;
+        }
+        break;
+      case 74: //j -- counterClockwise about y
+        if (!perspective  && (view == "front" || view == "bottom")){
+          ccwY = false;
+        }else{
+          ccwY = true;
+        }
+        break;
+      case 73:  //i -- clockwise about x
+        if (!perspective  && (view == "front" || view == "bottom")){
+          cwX = false;
+        }else{
+          cwX=true;
+        }
+        break; 
+      case 75:  //k -- counterClockwise about x
+        if (!perspective  && (view == "front" || view == "bottom")){
+          ccwX = false;
+        }else{
+          ccwX = true;
+        }
+        break;
+      case 85:  //u -- counterClockwise about z
+        ccwZ = true;
+        break;
+      case 79:  //o -- clockwise about z
+        cwZ = true;
+        break;
+    }
+  }
+
+  function keyUp(e){
+    ALT = e.altKey;
+    switch (e.which){
+      case 87:  //w
+        up = false;
+        break;
+      case 83:  //s
+        down = false;
+        break;
+      case 65:  //a
+        left = false;
+        break;
+      case 68:  //d
+        right = false;
+        break;
+      case 81:  //q
+        backward = false;
+        break;
+      case 69:  //e
+        forward = false;
+        break;
+
+      //rotate
+      case 76:  //l -- clockwise about y
+        cwY = false;
+        break;
+      case 74: //j -- counterClockwise about y
+        ccwY = false;
+        break;
+      case 73:  //i -- clockwise about x
+        cwX = false;
+        break; 
+      case 75:  //k -- counterClockwise about x
+        ccwX = false;
+        break;
+      case 85:  //u -- counterClockwise about z
+        ccwZ = false;
+        break;
+      case 79:  //o -- clockwise about z
+        cwZ = false;
+        break;
+      //toggle perspective
+      case 80:
+        if (perspective){
+          perspective = false;
+          /*let's also change the text in the controls div to alert users
+          that in orthographic mode*/
+        }else{
+          perspective = true;
+          //change controls div to say perspective
+        }
+        break;
+    }
+  }
+
 
 });
 

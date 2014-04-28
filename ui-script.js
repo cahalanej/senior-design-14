@@ -1,6 +1,8 @@
 var SELECTED, LAST_SELECTED=0;
-var effector = false
+var effector = false;
+var ALT = false;
 var degToRad = 3.14/180.0;
+
 
 
 function toggleIK(e){
@@ -38,55 +40,81 @@ function toggleRoot(){
       }
       SELECTED = scene.getObjectByName("root",true);
       SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-        { color: 676767, opacity: 0.75 } ); 
+        { color: 0x676767, opacity: 0.75 } ); 
     }
   }
   
-  function blurX(e){
-    console.log(e.target.value);
-    var rotVal = e.target.value * degToRad;
-    if (SELECTED){
-      if (SELECTED.name == "root"){
-        SELECTED.rotation.x = rotVal;
+  function blurX(joint, rotVal){
+    if (joint){
+      if (joint.name == "root"){
+        joint.rotation.x = rotVal;
       }
        //KNEE LIMITATIONS
-      if (SELECTED.name == "right-knee" || SELECTED.name == "left-knee"){
-        if (rotVal >= (-5*degToRad) && rotVal <= (150*degToRad)){
-          SELECTED.rotation.x = rotVal;             
+      if (joint.name == "right-knee" || joint.name == "left-knee"){
+        if (rotVal < (-5*degToRad)){
+          joint.rotation.x = -5*degToRad;  
+        }
+        else if (rotVal > (150*degToRad)){
+          joint.rotation.x = 150 * degToRad;
+        }
+        else{
+          joint.rotation.x = rotVal;             
         }
       }
 
       //ELBOW LIMITATIONS
-      if (SELECTED.name == "right-elbow" || SELECTED.name == "left-elbow"){
+      if (joint.name == "right-elbow" || joint.name == "left-elbow"){
       }
             
-
-
       //SHOULDER LIMITATIONS    
-      if (SELECTED.name == "right-shoulder" || SELECTED.name == "left-shoulder"){
-        if (rotVal <= (60*degToRad) && rotVal >= (-180*degToRad)){
-          SELECTED.rotation.x = rotVal;   
+      if (joint.name == "right-shoulder" || joint.name == "left-shoulder"){
+        if (rotVal > (60*degToRad)){
+          joint.rotation.x = 60*degToRad;
+        }
+        else if (rotVal < (-180*degToRad)){
+          joint.rotation.x = -180*degToRad;
+        }
+        else{
+          joint.rotation.x = rotVal;   
         }
       }
 
       //HIP LIMITATIONS    
-      if (SELECTED.name == "right-hip" || SELECTED.name == "left-hip"){
-        if (rotVal <= (30*degToRad) && rotVal >= (-120*degToRad)){
-          SELECTED.rotation.x = rotVal;   
+      if (joint.name == "right-hip" || joint.name == "left-hip"){
+        if (rotVal > (30 * degToRad)){
+          joint.rotation.x = 30 * degToRad;
+        }
+        else if (rotVal < (-120 * degToRad)){
+          joint.rotation.x = -120 * degToRad;
+        }
+        else{
+          joint.rotation.x = rotVal;   
         }
       }
 
       //NECK LIMITATIONS    
-      if (SELECTED.name == "neck"){
-        if (rotVal <= (70*degToRad) && rotVal >= (-55*degToRad)){
-          SELECTED.rotation.x = rotVal;   
+      if (joint.name == "neck"){
+        if (rotVal > (70 * degToRad)){
+          joint.rotation.x = 70 * degToRad;
+        }
+        else if (rotVal < (-55 * degToRad)){
+          joint.rotation.x = -55 * degToRad;
+        }
+        else{
+          joint.rotation.x = rotVal;   
         }
       }
 
       //LOWER BACK LIMITATIONS    
-      if (SELECTED.name == "lower-back"){
-        if (rotVal <= (77*degToRad) && rotVal >= (-30*degToRad)){
-          SELECTED.rotation.x = rotVal;   
+      if (joint.name == "lower-back"){
+        if (rotVal > (77*degToRad)){
+          joint.rotation.x = 77 * degToRad;
+        }
+        else if (rotVal < (-30 * degToRad)){
+          joint.rotation.x = -30 * degToRad;
+        }
+        else{
+          joint.rotation.x = rotVal;   
         }
       }
     }
@@ -96,65 +124,105 @@ function toggleRoot(){
     $("#x-rot").val("")
   }
 
-  function blurY(e){
-    var rotVal = e.target.value * degToRad;
-    if (SELECTED){
-      if (SELECTED.name == "root"){
-        SELECTED.rotation.y = rotVal;
+  function blurY(joint, rotVal){
+    if (joint){
+      if (joint.name == "root"){
+        joint.rotation.y = rotVal;
       }
        //KNEE LIMITATIONS
-      if (SELECTED.name == "right-knee" || SELECTED.name == "left-knee"){
-
+      if (joint.name == "right-knee" || joint.name == "left-knee"){
       }
 
       //ELBOW LIMITATIONS
-      if (SELECTED.name == "right-elbow" || SELECTED.name == "left-elbow"){
-        if (rotVal < (10*degToRad) && rotVal > (-135*degToRad)){
-          SELECTED.rotation.y = rotVal;               
+      if (joint.name == "right-elbow" || joint.name == "left-elbow"){
+        if (rotVal > (10 * degToRad)){
+          joint.rotation.y = 10 * degToRad;
+        }
+        else if (rotVal < (-135 * degToRad)){
+          joint.rotation.y = -135 * degToRad;
+        }
+        else{
+          joint.rotation.y = rotVal;               
         }
       }
             
 
 
       //SHOULDER LIMITATIONS    
-      if (SELECTED.name == "right-shoulder" || SELECTED.name == "left-shoulder"){
-        if (SELECTED.name == "right-shoulder"){
-          if (rotVal > (-130*degToRad) && rotVal < (45*degToRad)){
-            SELECTED.rotaion.y = rotVal;  
+      if (joint.name == "right-shoulder" || joint.name == "left-shoulder"){
+        if (joint.name == "right-shoulder"){
+          if (rotVal < (-130 * degToRad)){
+            joint.rotation.y = -130 * degToRad; 
+          }
+          else if (rotVal > (45 * degToRad)){
+            joint.rotation.y = 45 * degToRad;
+          }
+          else{
+            joint.rotation.y = rotVal;  
           }
         }
-        if (SELECTED.name == "left-shoulder"){
-          if (rotVal > (-45*degToRad) && rotVal < (89*degToRad)){
-            SELECTED.rotation.y = rotVal;  
+        if (joint.name == "left-shoulder"){
+          if (rotVal < (-45 * degToRad)){
+            joint.rotation.y = -45 * degToRad; 
+          }
+          else if (rotVal > (89 * degToRad)){
+            joint.rotation.y = 89 * degToRad;
+          }
+          else{
+            joine.rotaion.y = rotVal;  
           }
         }
       }
 
       //HIP LIMITATIONS    
-      if (SELECTED.name == "right-hip" || SELECTED.name == "left-hip"){
-        if (SELECTED.name == "right-hip"){
-          if (rotVal > (-40*degToRad) && rotVal < (45*degToRad)){
-            SELECTED.rotation.y = rotVal;  
+      if (joint.name == "right-hip" || joint.name == "left-hip"){
+        if (joint.name == "right-hip"){
+          if (rotVal < (-40 * degToRad)){
+            joint.rotation.y = -40 * degToRad;
+          }
+          else if (rotVal > (45 * degToRad)){
+            joint.rotation.y = 45 * degToRad;
+          }
+          else{
+            joint.rotation.y = rotVal;  
           }
         }
-        if (SELECTED.name == "left-hip"){
-          if (rotVal > (-45*degToRad) && rotVal < (40*degToRad)){
-            SELECTED.rotation.y = rotVal; 
+        if (joint.name == "left-hip"){
+          if (rotVal < (-45 * degToRad)){
+            joint.rotation.y = -45 * degToRad;
+          }
+          else if (rotVal > (40 * degToRad)){
+            joint.rotation.y = 40 * degToRad;
+          }
+          else{
+            joint.rotation.y = rotVal;  
           }
         }
       }
 
       //NECK LIMITATIONS    
-      if (SELECTED.name == "neck"){
-        if (rotVal > (-70*degToRad) && rotVal < (70*degToRad)){
-          SELECTED.rotation.y = rotVal;  
+      if (joint.name == "neck"){
+        if (rotVal < (-70 * degToRad)){
+          joint.rotation.y = -70 * degToRad;
+        }
+        else if (rotVal > (70 * degToRad)){
+          joint.rotation.y = 70 * degToRad;
+        }
+        else{
+          joint.rotation.y = rotVal;  
         }
       }
 
       //LOWER BACK LIMITATIONS    
-      if (SELECTED.name == "lower-back"){
-        if (rotVal > (-40*degToRad) && rotVal < (40*degToRad)){
-          SELECTED.rotation.y = rotVal;  
+      if (joint.name == "lower-back"){
+        if (rotVal < (-40 * degToRad)){
+          joint.rotation.y = -40 * degToRad;
+        }
+        else if (rotVal > (40 * degToRad)){
+          joint.rotation.y = 40 * degToRad;
+        }
+        else{
+          joint.rotation.y = rotVal;  
         }
       }
     }
@@ -164,61 +232,94 @@ function toggleRoot(){
     $("#y-rot").val("")
   }
 
-  function blurZ(e){
-    var rotVal = e.target.value * degToRad;
-    if (SELECTED){
-      if (SELECTED.name == "root"){
-        SELECTED.rotation.z = rotVal;
+  function blurZ(joint, rotVal){
+    if (joint){
+      if (joint.name == "root"){
+        joint.rotation.z = rotVal;
       }
        //KNEE LIMITATIONS
-      if (SELECTED.name == "right-knee" || SELECTED.name == "left-knee"){
+      if (joint.name == "right-knee" || joint.name == "left-knee"){
       }
 
       //ELBOW LIMITATIONS
-      if (SELECTED.name == "right-elbow" || SELECTED.name == "left-elbow"){
+      if (joint.name == "right-elbow" || joint.name == "left-elbow"){
       }
             
-
-
       //SHOULDER LIMITATIONS    
-      if (SELECTED.name == "right-shoulder" || SELECTED.name == "left-shoulder"){
-        if (SELECTED.name == "right-shoulder"){
-          if (rotVal < (90*degToRad) && rotVal > (-135*degToRad)){
-          SELECTED.rotation.z = rotVal;
+      if (joint.name == "right-shoulder" || joint.name == "left-shoulder"){
+        if (joint.name == "right-shoulder"){
+          if (rotVal > (90 * degToRad)){
+            joint.rotation.z = 90 * degToRad;
+          }
+          else if (rotVal < (-135 * degToRad)){
+            joint.rotation.z = -135 * degToRad;
+          }
+          else{
+            joint.rotation.z = rotVal;
           }
         }
-        if (SELECTED.name == "left-shoulder"){
-          if (rotVal > (-90*degToRad) && rotVal < (135*degToRad)){
-            SELECTED.rotation.z = rotVal;
+        if (joint.name == "left-shoulder"){
+          if (rotVal < (-90 * degToRad)){
+            joint.rotation.z = -90 * degToRad;
+          }
+          else if (rotVal > (135 * degToRad)){
+            joint.rotation.z = 135 * degToRad;
+          }
+          else{
+            joint.rotation.z = rotVal;
           }
         }
       }
 
       //HIP LIMITATIONS    
-      if (SELECTED.name == "right-hip" || SELECTED.name == "left-hip"){
-        if (SELECTED.name == "right-hip"){
-          if (rotVal < (90*degToRad) && rotVal > (-20*degToRad)){
-            SELECTED.rotation.z = rotVal;
+      if (joint.name == "right-hip" || joint.name == "left-hip"){
+        if (joint.name == "right-hip"){
+          if (rotVal > (90 * degToRad)){
+            joint.rotation.z = 90 * degToRad;
+          }
+          else if (rotVal < (-20 * degToRad)){
+            joint.rotation.z = -20 * degToRad;
+          }
+          else{
+            joint.rotation.z = rotVal;
           }
         }
-        if (SELECTED.name == "left-hip"){
-          if (rotVal > (-90*degToRad) && rotVal < (20*degToRad)){
-            SELECTED.rotation.z = rotVal;
+        if (joint.name == "left-hip"){
+          if (rotVal < (-90 * degToRad)){
+            joint.rotation.z = -90 * degToRad;
+          }
+          else if (rotVal > (20 * degToRad)){
+            joint.rotation.z = 20 * degToRad;
+          }
+          else{
+            joint.rotation.z = rotVal;
           }
         }
       }
 
       //NECK LIMITATIONS    
-      if (SELECTED.name == "neck"){
-        if (rotVal > (-35*degToRad) && rotVal < (35*degToRad)){
-          SELECTED.rotation.z = rotVal;
+      if (joint.name == "neck"){
+        if (rotVal < (-35 * degToRad)){
+          joint.rotation.z = -35 * degToRad;
+        }
+        else if (joint.rotation.z > (35 * degToRad)){
+          joint.rotation.z = 35 * degToRad;
+        }
+        else{
+          joint.rotation.z = rotVal;
         }
       }
 
       //LOWER BACK LIMITATIONS    
-      if (SELECTED.name == "lower-back"){
-        if (rotVal > (-35*degToRad) && rotVal < (35*degToRad)){
-          SELECTED.rotation.z = rotVal;
+      if (joint.name == "lower-back"){
+        if (rotVal < (-35 * degToRad)){
+          joint.rotation.z = -35 * degToRad;
+        }
+        else if (rotVal > (35 * degToRad)){
+          joint.rotation.z = 35 * degToRad;
+        }
+        else{
+          joint.rotation.z = rotVal;
         }
       }
     }
@@ -245,3 +346,27 @@ function toggleRoot(){
       $("#z-rot").attr("placeholder","n/a");
     }
   }
+
+  function toggleInfo(){
+    if ($("#information").hasClass("hide")){
+      if (!$("#help").hasClass("hide")){
+        $("#help").addClass("hide");
+      }
+      $("#information").removeClass("hide");
+    }else{
+      $("#information").addClass("hide");
+    }
+  }
+
+  function toggleHelp(){
+    if ($("#help").hasClass("hide")){
+      if (!$("#information").hasClass("hide")){
+        $("#information").addClass("hide");
+      }
+      $("#help").removeClass("hide");
+    }else{
+      $("#help").addClass("hide");
+    }
+  }
+
+
