@@ -134,7 +134,7 @@ $(function(){
           male=true;
         }
       })
-    //controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
     
 
     //mouse down sets variable to true if effector clicked
@@ -157,7 +157,13 @@ $(function(){
   }
 
   function animate() {
-    //controls.update();
+    if (ALT){
+      controls.enabled = false;
+    }
+    else{
+      controls.enabled = true;
+    }
+    controls.update();
     var xAxis = new THREE.Vector3(1, 0, 0);
     var yAxis = new THREE.Vector3(0, 1, 0);
     var zAxis = new THREE.Vector3(0, 0, 1);
@@ -432,9 +438,15 @@ $(function(){
 
               var theta = Math.acos(dot);
 
-              var xrot = cross.x * theta;
-              var yrot = cross.y * theta;
-              var zrot = cross.z * theta;
+              var axisDiv = cross.length();
+              if (axisDiv < 0.001 && axisDiv > -0.001){
+                continue;
+              }
+
+              var crossU = new THREE.Vector3(cross.normalize().x, cross.normalize().y, cross.normalize().z);
+              var xrot = -crossU.x * theta;
+              var yrot = -crossU.y * theta;
+              var zrot = crossU.z * theta;
               
               blurX(curJoint, xrot);
               blurY(curJoint, yrot);
