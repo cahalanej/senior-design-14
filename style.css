@@ -1,7 +1,7 @@
 body{
 	margin: 0;
 	padding: 0;
-	color: #cdcdcd;
+	color: #d1d6dc;
 	overflow: hidden;
 }
 
@@ -9,8 +9,8 @@ body{
 	position: relative;
 	top:0;
 	width: 100%;
-	background-image: -webkit-linear-gradient(top, #696969, #3f3f3f);
-	background-image: -moz-linear-gradient(top, #696969, #3f3f3f);
+	background-image: -webkit-linear-gradient(top, #5b6b7a, #21262b);
+	background-image: -moz-linear-gradient(top, #5b6b7a, #21262b);
 	height: 42px;
 	box-shadow: 0px 0px 10px #333;
 }
@@ -19,6 +19,13 @@ ul{
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
+}
+#title{
+	padding-left: 50px;
+}
+
+#title h3{
+	font-weight: normal;
 }
 
 .nav li{
@@ -35,7 +42,7 @@ ul{
 .dropdown{
 	position: absolute;
 	left:0;
-	background-color: #3f3f3f;
+	background-color: #313a42;
 	width: 200px;
 	z-index: 5;
 	overflow-y: auto;
@@ -56,6 +63,12 @@ ul{
 	line-height:  32px;
 	text-align: center;
 	background-color: #fffff7;
+
+	background-image: -moz-linear-gradient(top, #f2f4f5 75%, #5b6b7a);
+	background-image: -webkit-linear-gradient(top, #f2f4f5 75%, #5b6b7a);
+	color: #313a42;
+	font-size: 12px;
+	cursor: pointer;
 }
 
 li p{

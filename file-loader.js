@@ -2,150 +2,196 @@ var objects = [], joints=[], scene, joints_female=[], objects_female=[], effecto
 
 function loadMale(){
   var loader = new THREE.OBJLoader();
-  loader.load("root.obj", function(rooter){
+  loader.load("m_lower_back.obj", function(rooter){
     var root = rooter;
     root.scale.set(1,1,1);
     root.name = "lower-back";
+    root.children[0].material = new THREE.MeshPhongMaterial( 
+      { color: 0xe7eaed, opacity: 1 } );
 
-    loader.load("torso.obj", function(torso){
-      torso.position.y = 1.681;
+    loader.load("m_torso.obj", function(torso){
+      torso.position.y = .912;
+      torso.children[0].material = new THREE.MeshPhongMaterial( 
+        { color: 0xe7eaed, opacity: 1 } );
 
-      loader.load("neck.obj", function(necked){
+      loader.load("m_neck.obj", function(necked){
 
-        loader.load("head.obj", function(head){
-          head.position.x = -0.009;
-          head.position.y=0.843;
-          head.position.z=0.121;
+        loader.load("m_head.obj", function(head){
+          head.position.x = 0;
+          head.position.y=0.643;
+          head.position.z=0.073;
+          head.children[0].material = new THREE.MeshPhongMaterial( 
+            { color: 0xe7eaed, opacity: 1 } );
 
-          loader.load("lshoulder.obj", function(lshouldered){
+          loader.load("m_rshoulder.obj", function(lshouldered){
 
-            loader.load("luarm.obj", function(luarm){
-              luarm.position.x = .612;
-              luarm.position.y = -.547;
-              luarm.position.z=-.185;
+            loader.load("m_luarm.obj", function(luarm){
+              luarm.position.x = .55;
+              luarm.position.y = -.011;
+              luarm.position.z= -.012;
+              luarm.scale.x = 1;
+              luarm.scale.y = -1;
+              luarm.children[0].material = new THREE.MeshPhongMaterial( 
+                { color: 0xe7eaed, opacity: 1 } );
 
-              loader.load("lelbow.obj", function(lelbowed){
+              loader.load("m_relbow.obj", function(lelbowed){
 
-                loader.load("llarm.obj", function(llarm){
-                  llarm.position.x=.47;
-                  llarm.position.y=-.503;
-                  llarm.position.z=-.405;
+                loader.load("m_rlarm.obj", function(llarm){
+                  llarm.position.x=.663;
+                  llarm.position.y=0.126;
+                  llarm.position.z=-.009;
+                  llarm.scale.x = -1;
+                  llarm.scale.y = -1;
+                  llarm.children[0].material = new THREE.MeshPhongMaterial( 
+                    { color: 0xe7eaed, opacity: 1 } );
 
-                  loader.load("lshoulder.obj", function(rshouldered){
+                  loader.load("m_rshoulder.obj", function(rshouldered){
 
-                    loader.load("luarm.obj", function(ruarm){
-                      ruarm.position.x = -.612;
-                      ruarm.position.y = .547;
-                      ruarm.position.z=-.185;
-                      ruarm.scale.x= -1;
-                      ruarm.scale.y=-1;
+                    loader.load("m_ruarm.obj", function(ruarm){
+                      ruarm.position.x = -0.55;
+                      ruarm.position.y = -0.011;
+                      ruarm.position.z=-0.012;
+                      ruarm.scale.x= 1;
+                      ruarm.scale.y=1;
+                      ruarm.children[0].material = new THREE.MeshPhongMaterial(
+                        { color: 0xe7eaed, opacity: 1 } );
 
-                      loader.load("lelbow.obj", function(relbowed){
+                      loader.load("m_relbow.obj", function(relbowed){
 
-                        loader.load("llarm.obj", function(rlarm){
-                          rlarm.position.x=-.47;
-                          rlarm.position.y=.503;
-                          rlarm.position.z=-.405;
-                          rlarm.scale.x= -1;
-                          rlarm.scale.y =-1;
+                        loader.load("m_rlarm.obj", function(rlarm){
+                          rlarm.position.x=-0.663;
+                          rlarm.position.y=-0.126;
+                          rlarm.position.z=-0.009;
+                          rlarm.scale.x= 1;
+                          rlarm.scale.y =1;
+                          rlarm.children[0].material = new THREE.MeshPhongMaterial( 
+                            { color: 0xe7eaed, opacity: 1 } );
 
-                          loader.load("pelvis.obj", function(pelvis_obj){
-                            pelvis = pelvis_obj;
-                            pelvis.position.x=.019;
-                            pelvis.position.y=-.66;
-                            pelvis.position.z=.035;
+                          loader.load("m_pelvis.obj", function(pelvis_obj){
+                           var pelvis = pelvis_obj;
+                            pelvis.position.x=0;
+                            pelvis.position.y=-0;
+                            pelvis.position.z=.0;;
+                            pelvis.children[0].material = new THREE.MeshPhongMaterial( 
+                              { color: 0xe7eaed, opacity: 1 } );
 
-                            root.position.y = .67;
+                            root.position.y = .427;
                             root.position.x= 0;//-1.503;
 
-                            loader.load("lhip.obj", function(lhip){
+                            loader.load("m_rhip.obj", function(lhip){
 
-                              loader.load("lhip.obj", function(rhip){
+                              loader.load("m_rhip.obj", function(rhip){
 
-                                loader.load("luleg.obj", function(luleg){
-                                  luleg.position.x=.643;
-                                  luleg.position.y=-.635;
-                                  luleg.position.z=-.215;
+                                loader.load("m_luleg.obj", function(luleg){
+                                  luleg.position.x=0;
+                                  luleg.position.y=-0.753;
+                                  luleg.position.z=0.126;
+                                  luleg.scale.x = 1;
+                                  luleg.children[0].material = new THREE.MeshPhongMaterial( 
+                                    { color: 0xe7eaed, opacity: 1 } );
 
-                                  loader.load("luleg.obj", function(ruleg){
-                                    ruleg.position.x=-.643;
-                                    ruleg.position.y=.635;
-                                    ruleg.position.z=-.215;
+                                  loader.load("m_ruleg.obj", function(ruleg){
+                                    ruleg.position.x=0;
+                                    ruleg.position.y=-0.753;
+                                    ruleg.position.z=0.126;
                                     ruleg.scale.x = -1;
-                                    ruleg.scale.y = -1;
+                                    ruleg.scale.y = 1;
+                                    ruleg.children[0].material = new THREE.MeshPhongMaterial( { color: 0xe7eaed, opacity: 1 } );
 
 
-                                    loader.load("lknee.obj", function(lknee){
+                                    loader.load("m_knee.obj", function(lknee){
 
-                                      loader.load("lknee.obj", function(rknee){
-                            
-                                        loader.load("llleg.obj", function(llleg){
-                                          llleg.position.x=.626;
-                                          llleg.position.y=-.555;
-                                          llleg.position.z=-.198;
+                                      loader.load("m_knee.obj", function(rknee){
 
-                                          loader.load("llleg.obj", function(rlleg){
-                                            rlleg.position.x=-.626;
-                                            rlleg.position.y=.555;
-                                            rlleg.position.z=-.198;
-                                            rlleg.scale.x = -1;
-                                            rlleg.scale.y = -1;
+                                        loader.load("m_rlleg.obj", function(llleg){
+                                          llleg.position.x=.058;
+                                          llleg.position.y=-1.007;
+                                          llleg.position.z=0;
+                                          llleg.children[0].material = new THREE.MeshPhongMaterial( 
+                                            { color: 0xe7eaed, opacity: 1 } );
+
+                                          loader.load("m_rlleg.obj", function(rlleg){
+                                            rlleg.position.x=0.058;
+                                            rlleg.position.y=-1.007;
+                                            rlleg.position.z=0;
+                                            //rlleg.scale.x = -1;
+                                            //rlleg.scale.y = -1;
+                                            rlleg.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
                                             var neck = necked;
-                                            neck.position.y = 1.449;
-                                            neck.position.z=0.12;
+                                            neck.position.y = .643;
+                                            neck.position.z=-.10;
                                             neck.name = "neck";
+                                            neck.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
                                             var lshoulder = lshouldered;
-                                            lshoulder.position.x=1.12;
-                                            lshoulder.position.y=.845;
-                                            lshoulder.position.z=.12;
+                                            lshoulder.position.x=0.853;
+                                            lshoulder.position.y=.219;
+                                            lshoulder.position.z=-0.158;
                                             lshoulder.name = "right-shoulder";
+                                            lshoulder.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
                                             var lelbow=lelbowed;
-                                            lelbow.position.x=1.076;
-                                            lelbow.position.y=.555;
-                                            lelbow.position.z=.213;
+                                            lelbow.position.x=0.369;
+                                            lelbow.position.y=0;
+                                            lelbow.position.z=0.04;
+                                            lelbow.scale.y = -1;
                                             lelbow.name= "right-elbow";
+                                            lelbow.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
                                             var rshoulder = rshouldered;
-                                            rshoulder.position.x=-1.12;
-                                            rshoulder.position.y=.845;
-                                            rshoulder.position.z=.12;
+                                            rshoulder.position.x=-0.853;
+                                            rshoulder.position.y=.219;
+                                            rshoulder.position.z=-0.158;
                                             rshoulder.scale.x= 1;
                                             rshoulder.name = "left-shoulder";
+                                            rshoulder.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
                                             var relbow=relbowed;
-                                            relbow.position.x=1.076;
-                                            relbow.position.y=.555;
-                                            relbow.position.z=.213;
-                                            relbow.scale.x= -1;
-                                            relbow.scale.y= -1;
+                                            relbow.position.x=-0.369;
+                                            relbow.position.y=0;
+                                            relbow.position.z=0.04;
+                                            relbow.scale.x= 1;
+                                            relbow.scale.y= 1;
                                             relbow.name ="left-elbow";
+                                            relbow.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
-                                            lhip.position.x=.459;
-                                            lhip.position.y=-.738;
-                                            lhip.position.z=-.059;
+                                            lhip.position.x=0.402;
+                                            lhip.position.y=-0.231;
+                                            lhip.position.z=-0.011;
                                             lhip.name = "right-hip";
+                                            lhip.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
-                                            rhip.position.x=-.459;
-                                            rhip.position.y=-.738;
-                                            rhip.position.z=-.059;
-                                            rhip.scale.x = -1;
-                                            rhip.scale.y = -1;
+                                            rhip.position.x=-0.402;
+                                            rhip.position.y=-0.231;
+                                            rhip.position.z=-0.011;
+                                            rhip.scale.x = 1;
+                                            rhip.scale.y = 1;
                                             rhip.name = "left-hip";
+                                            rhip.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
-                                            lknee.position.x=-.63;
-                                            lknee.position.y=-1.479;
-                                            lknee.position.z=.206;
+                                            lknee.position.x=0.115;
+                                            lknee.position.y=-0.691;
+                                            lknee.position.z=0.032;
                                             lknee.name = "right-knee";
+                                            lknee.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
-                                            rknee.position.x=-.63;
-                                            rknee.position.y=-1.479;
-                                            rknee.position.z=.206;
+                                            rknee.position.x=-.115;
+                                            rknee.position.y=-.691;
+                                            rknee.position.z=.032;
                                             rknee.scale.x = -1;
-                                            rknee.scale.y = -1;
                                             rknee.name = "left-knee";
+                                            rknee.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
 
                                             neck.children.push(head);
                                             head.parent = neck;
@@ -224,7 +270,299 @@ function loadMale(){
 
                                             scene.add(pelvis);
                                             objects.push(pelvis);
-                                          
+
+                                          });
+                                        });
+                                      });
+                                    });
+                                  });
+                                });
+                              });
+                            });
+                          }); 
+                        });
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+}
+
+function loadFemale(){
+  //FEMALE
+  var loader = new THREE.OBJLoader();
+  loader.load("f_lower_back.obj", function(rooter){
+    var root = rooter;
+    root.scale.set(1,1,1);
+    root.name = "lower-back";
+    root.children[0].material = new THREE.MeshPhongMaterial( 
+      { color: 0xe7eaed, opacity: 1 } );
+
+    loader.load("f_torso.obj", function(torso){
+      torso.position.y = .912;
+      torso.children[0].material = new THREE.MeshPhongMaterial( 
+        { color: 0xe7eaed, opacity: 1 } );
+
+      loader.load("f_neck.obj", function(necked){
+
+        loader.load("f_head.obj", function(head){
+          head.position.x = 0;
+          head.position.y=0.643;
+          head.position.z=0.073;
+          head.children[0].material = new THREE.MeshPhongMaterial( 
+            { color: 0xe7eaed, opacity: 1 } );
+
+          loader.load("f_rshoulder.obj", function(lshouldered){
+
+            loader.load("f_ruarm.obj", function(luarm){
+              luarm.position.x = .55;
+              luarm.position.y = -.011;
+              luarm.position.z= -.012;
+              luarm.scale.x = 1;
+              luarm.scale.y = -1;
+              luarm.children[0].material = new THREE.MeshPhongMaterial( 
+                { color: 0xe7eaed, opacity: 1 } );
+
+              loader.load("f_relbow.obj", function(lelbowed){
+
+                loader.load("f_rlarm.obj", function(llarm){
+                  llarm.position.x=.663;
+                  llarm.position.y=0.126;
+                  llarm.position.z=-.009;
+                  llarm.scale.x = -1;
+                  llarm.scale.y = -1;
+                  llarm.children[0].material = new THREE.MeshPhongMaterial( 
+                    { color: 0xe7eaed, opacity: 1 } );
+
+                  loader.load("f_rshoulder.obj", function(rshouldered){
+
+                    loader.load("f_ruarm.obj", function(ruarm){
+                      ruarm.position.x = -0.55;
+                      ruarm.position.y = -0.011;
+                      ruarm.position.z=-0.012;
+                      ruarm.scale.x= 1;
+                      ruarm.scale.y=1;
+                      ruarm.children[0].material = new THREE.MeshPhongMaterial(
+                        { color: 0xe7eaed, opacity: 1 } );
+
+                      loader.load("f_relbow.obj", function(relbowed){
+
+                        loader.load("f_rlarm.obj", function(rlarm){
+                          rlarm.position.x=-0.663;
+                          rlarm.position.y=-0.126;
+                          rlarm.position.z=-0.009;
+                          rlarm.scale.x= 1;
+                          rlarm.scale.y =1;
+                          rlarm.children[0].material = new THREE.MeshPhongMaterial( 
+                            { color: 0xe7eaed, opacity: 1 } );
+
+                          loader.load("f_pelvis.obj", function(pelvis_obj){
+                            var pelvis = pelvis_obj;
+                            pelvis.position.x=0;
+                            pelvis.position.y=-0;
+                            pelvis.position.z=.0;;
+                            pelvis.children[0].material = new THREE.MeshPhongMaterial( 
+                              { color: 0xe7eaed, opacity: 1 } );
+
+                            root.position.y = .427;
+                            root.position.x= 0;//-1.503;
+
+                            loader.load("f_rhip.obj", function(lhip){
+
+                              loader.load("f_rhip.obj", function(rhip){
+
+                                loader.load("f_ruleg.obj", function(luleg){
+                                  luleg.position.x=0;
+                                  luleg.position.y=-0.753;
+                                  luleg.position.z=0.126;
+                                  luleg.scale.x = 1;
+                                  luleg.children[0].material = new THREE.MeshPhongMaterial( 
+                                    { color: 0xe7eaed, opacity: 1 } );
+
+                                  loader.load("f_ruleg.obj", function(ruleg){
+                                    ruleg.position.x=0;
+                                    ruleg.position.y=-0.753;
+                                    ruleg.position.z=0.126;
+                                    ruleg.scale.x = -1;
+                                    ruleg.scale.y = 1;
+                                    ruleg.children[0].material = new THREE.MeshPhongMaterial( { color: 0xe7eaed, opacity: 1 } );
+
+
+                                    loader.load("f_knee.obj", function(lknee){
+
+                                      loader.load("f_knee.obj", function(rknee){
+
+                                        loader.load("f_rlleg.obj", function(llleg){
+                                          llleg.position.x=.058;
+                                          llleg.position.y=-1.007;
+                                          llleg.position.z=0;
+                                          llleg.children[0].material = new THREE.MeshPhongMaterial( 
+                                            { color: 0xe7eaed, opacity: 1 } );
+
+                                          loader.load("f_rlleg.obj", function(rlleg){
+                                            rlleg.position.x=0.058;
+                                            rlleg.position.y=-1.007;
+                                            rlleg.position.z=0;
+                                            //rlleg.scale.x = -1;
+                                            //rlleg.scale.y = -1;
+                                            rlleg.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            var neck = necked;
+                                            neck.position.y = .643;
+                                            neck.position.z=-.10;
+                                            neck.name = "neck";
+                                            neck.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            var lshoulder = lshouldered;
+                                            lshoulder.position.x=0.853;
+                                            lshoulder.position.y=.219;
+                                            lshoulder.position.z=-0.158;
+                                            lshoulder.name = "right-shoulder";
+                                            lshoulder.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            var lelbow=lelbowed;
+                                            lelbow.position.x=0.369;
+                                            lelbow.position.y=0;
+                                            lelbow.position.z=0.04;
+                                            lelbow.scale.y = -1;
+                                            lelbow.name= "right-elbow";
+                                            lelbow.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            var rshoulder = rshouldered;
+                                            rshoulder.position.x=-0.853;
+                                            rshoulder.position.y=.219;
+                                            rshoulder.position.z=-0.158;
+                                            rshoulder.scale.x= 1;
+                                            rshoulder.name = "left-shoulder";
+                                            rshoulder.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            var relbow=relbowed;
+                                            relbow.position.x=-0.369;
+                                            relbow.position.y=0;
+                                            relbow.position.z=0.04;
+                                            relbow.scale.x= 1;
+                                            relbow.scale.y= 1;
+                                            relbow.name ="left-elbow";
+                                            relbow.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            lhip.position.x=0.402;
+                                            lhip.position.y=-0.231;
+                                            lhip.position.z=-0.011;
+                                            lhip.name = "right-hip";
+                                            lhip.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            rhip.position.x=-0.402;
+                                            rhip.position.y=-0.231;
+                                            rhip.position.z=-0.011;
+                                            rhip.scale.x = 1;
+                                            rhip.scale.y = 1;
+                                            rhip.name = "left-hip";
+                                            rhip.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            lknee.position.x=0.115;
+                                            lknee.position.y=-0.691;
+                                            lknee.position.z=0.032;
+                                            lknee.name = "right-knee";
+                                            lknee.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            rknee.position.x=-.115;
+                                            rknee.position.y=-.691;
+                                            rknee.position.z=.032;
+                                            rknee.scale.x = -1;
+                                            rknee.name = "left-knee";
+                                            rknee.children[0].material = new THREE.MeshPhongMaterial( 
+                                              { color: 0xe7eaed, opacity: 1 } );
+
+                                            neck.children.push(head);
+                                            head.parent = neck;
+
+                                            relbow.children.push(rlarm);
+                                            rlarm.parent = relbow;
+
+                                            ruarm.children.push(relbow);
+                                            relbow.parent = ruarm;
+
+                                            rshoulder.children.push(ruarm);
+                                            ruarm.parent = rshoulder;
+
+                                            torso.children.push(rshoulder);
+                                            rshoulder.parent = torso;
+
+                                            lelbow.children.push(llarm);
+                                            llarm.parent = lelbow;
+
+                                            luarm.children.push(lelbow);
+                                            lelbow.parent = luarm;
+
+                                            lshoulder.children.push(luarm);
+                                            luarm.parent = lshoulder;
+
+                                            torso.children.push(lshoulder);
+                                            lshoulder.parent = torso;
+
+                                            torso.children.push(neck);
+                                            neck.parent = torso;
+
+                                            root.children.push(torso);
+                                            torso.parent = root;
+
+                                            lknee.children.push(llleg);
+                                            llleg.parent = lknee;
+
+                                            rknee.children.push(rlleg)
+                                            rlleg.parent = rknee;
+
+                                            luleg.children.push(lknee);
+                                            lknee.parent = luleg;
+
+                                            ruleg.children.push(rknee)
+                                            rknee.parent = ruleg;
+
+                                            lhip.children.push(luleg);
+                                            luleg.parent = lhip;
+
+                                            rhip.children.push(ruleg)
+                                            ruleg.parent = rhip;
+
+                                            pelvis.children.push(lhip);
+                                            lhip.parent = pelvis;
+
+                                            pelvis.children.push(rhip);
+                                            rhip.parent = pelvis;
+
+                                            root.parent=pelvis;
+                                            pelvis.children.push(root);
+                                            pelvis.name ="root";
+
+
+                                            joints_female.push(root);
+                                            joints_female.push(lhip);
+                                            joints_female.push(rhip);
+                                            joints_female.push(lknee);
+                                            joints_female.push(rknee);
+                                            joints_female.push(neck);
+                                            joints_female.push(rshoulder);
+                                            joints_female.push(lshoulder);
+                                            joints_female.push(relbow);
+                                            joints_female.push(lelbow);
+
+                                            objects_female.push(pelvis);
+
                                           });
                                         });
                                       });
@@ -245,160 +583,7 @@ function loadMale(){
         });
       });
     });
-  });
-}
-
-function loadFemale(){
-  //FEMALE
-  var loader = new THREE.OBJLoader();
-  loader.load("root.obj", function(rooter){
-    var root = rooter;
-    root.scale.set(1,1,1);
-    root.name = "lower-back";
-
-    loader.load("torso.obj", function(torso){
-      torso.position.y = 1.681;
-
-      loader.load("neck.obj", function(necked){
-
-        loader.load("head.obj", function(head){
-          head.position.x = -0.009;
-          head.position.y=0.843;
-          head.position.z=0.121;
-
-          loader.load("lshoulder.obj", function(lshouldered){
-
-            loader.load("luarm.obj", function(luarm){
-              luarm.position.x = .612;
-              luarm.position.y = -.547;
-              luarm.position.z=-.185;
-
-              loader.load("lelbow.obj", function(lelbowed){
-
-                loader.load("llarm.obj", function(llarm){
-                  llarm.position.x=.47;
-                  llarm.position.y=-.503;
-                  llarm.position.z=-.405;
-
-                  loader.load("lshoulder.obj", function(rshouldered){
-
-                    loader.load("luarm.obj", function(ruarm){
-                      ruarm.position.x = -.612;
-                      ruarm.position.y = .547;
-                      ruarm.position.z=-.185;
-                      ruarm.scale.x= -1;
-                      ruarm.scale.y=-1;
-
-                      loader.load("lelbow.obj", function(relbowed){
-
-                        loader.load("llarm.obj", function(rlarm){
-                          rlarm.position.x=-.47;
-                          rlarm.position.y=.503;
-                          rlarm.position.z=-.405;
-                          rlarm.scale.x= -1;
-                          rlarm.scale.y =-1;
-
-                          loader.load("pelvis.obj", function(pelvis_obj){
-                            var pelvis = pelvis_obj;
-                            pelvis.position.x=.019;
-                            pelvis.position.y=-.66;
-                            pelvis.position.z=.035;
-
-                            root.position.y = .67;
-                            root.position.x= 0;
-
-                            var neck = necked;
-                            neck.position.y = 1.449;
-                            neck.position.z=0.12;
-                            neck.name = "neck";
-
-                            var lshoulder = lshouldered;
-                            lshoulder.position.x=1.12;
-                            lshoulder.position.y=.845;
-                            lshoulder.position.z=.12;
-                            lshoulder.name = "right-shoulder";
-
-                            var lelbow=lelbowed;
-                            lelbow.position.x=1.076;
-                            lelbow.position.y=.555;
-                            lelbow.position.z=.213;
-                            lelbow.name= "right-elbow";
-
-                            var rshoulder = rshouldered;
-                            rshoulder.position.x=-1.12;
-                            rshoulder.position.y=.845;
-                            rshoulder.position.z=.12;
-                            rshoulder.scale.x= 1;
-                            rshoulder.name = "left-shoulder";
-
-                            var relbow=relbowed;
-                            relbow.position.x=1.076;
-                            relbow.position.y=.555;
-                            relbow.position.z=.213;
-                            relbow.scale.x= -1;
-                            relbow.scale.y= -1;
-                            relbow.name ="left-elbow";
-
-                            neck.children.push(head);
-                            head.parent = neck;
-
-                            relbow.children.push(rlarm);
-                            rlarm.parent = relbow;
-
-                            ruarm.children.push(relbow);
-                            relbow.parent = ruarm;
-
-                            rshoulder.children.push(ruarm);
-                            ruarm.parent = rshoulder;
-
-                            torso.children.push(rshoulder);
-                            rshoulder.parent = torso;
-
-                            lelbow.children.push(llarm);
-                            llarm.parent = lelbow;
-
-                            luarm.children.push(lelbow);
-                            lelbow.parent = luarm;
-
-                            lshoulder.children.push(luarm);
-                            luarm.parent = lshoulder;
-
-                            torso.children.push(lshoulder);
-                            lshoulder.parent = torso;
-
-                            torso.children.push(neck);
-                            neck.parent = torso;
-
-                            root.children.push(torso);
-                            torso.parent = root;
-
-                            root.parent=pelvis;
-                            pelvis.children.push(root);
-                            pelvis.name ="root";  
-                            
-                            joints_female.push(root);
-                            joints_female.push(root);
-                            joints_female.push(neck);
-                            joints_female.push(lshoulder);
-                            joints_female.push(lelbow);
-                            joints_female.push(rshoulder);
-                            joints_female.push(relbow);
-
-                            objects_female.push(pelvis);
-                                          
-                          });
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  });
+  });                                
 }
 
 function loadEffector(){

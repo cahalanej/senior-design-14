@@ -16,17 +16,16 @@ function toggleIK(e){
 }
 
 function toggleRoot(){
-  var material = new THREE.MeshLambertMaterial( { color: 0xbbbbbb } );
+  var material = new THREE.MeshPhongMaterial( { color: 0xe7eaed } );
     if (SELECTED && SELECTED.name == "root"){
       SELECTED.children[0].material = material;
       
       if (LAST_SELECTED != 0){
 
         SELECTED = scene.getObjectById(LAST_SELECTED,true);
-        console.log(SELECTED);
         if (SELECTED){
           SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-          { color: 0x676767, opacity: 0.75 } ); 
+          { color: 0x5b6b7a, opacity: 1} ); 
         }
       }else{
        SELECTED = null;
@@ -36,11 +35,10 @@ function toggleRoot(){
       if (SELECTED){
         SELECTED.children[0].material = material;
         LAST_SELECTED = SELECTED.id;
-        console.log(LAST_SELECTED);
       }
       SELECTED = scene.getObjectByName("root",true);
       SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-        { color: 0x676767, opacity: 0.75 } ); 
+        { color: 0x5b6b7a, opacity: 1 } ); 
     }
   }
   
@@ -68,11 +66,11 @@ function toggleRoot(){
             
       //SHOULDER LIMITATIONS    
       if (joint.name == "right-shoulder" || joint.name == "left-shoulder"){
-        if (rotVal > (60*degToRad)){
-          joint.rotation.x = 60*degToRad;
+        if (rotVal > (150*degToRad)){
+          joint.rotation.x = 150*degToRad;
         }
-        else if (rotVal < (-180*degToRad)){
-          joint.rotation.x = -180*degToRad;
+        else if (rotVal < (-90*degToRad)){
+          joint.rotation.x = -90*degToRad;
         }
         else{
           joint.rotation.x = rotVal;   
@@ -134,7 +132,19 @@ function toggleRoot(){
       }
 
       //ELBOW LIMITATIONS
-      if (joint.name == "right-elbow" || joint.name == "left-elbow"){
+      if (joint.name == "left-elbow"){
+        if (rotVal < (-10 * degToRad)){
+          joint.rotation.y = -10 * degToRad;
+        }
+        else if (rotVal > (135 * degToRad)){
+          joint.rotation.y = 135 * degToRad;
+        }
+        else{
+          joint.rotation.y = rotVal;               
+        }
+      }
+
+       if (joint.name == "right-elbow"){
         if (rotVal > (10 * degToRad)){
           joint.rotation.y = 10 * degToRad;
         }
@@ -144,7 +154,7 @@ function toggleRoot(){
         else{
           joint.rotation.y = rotVal;               
         }
-      }
+       }
             
 
 

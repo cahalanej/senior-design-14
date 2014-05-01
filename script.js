@@ -22,6 +22,9 @@ $(function(){
   var perspective = true;
   var view = "front";
   var projector, mouse = {x:0, y:0};
+  var lastmouse = {x: 0, y: 0};
+var longitudinal=0, latitudinal =0;
+var theta = 0, phi = 0;
 
   var selectedMaterial;
   var controls; 
@@ -29,6 +32,7 @@ $(function(){
   var pelvis;
   var male=true;
   var height;
+  var mouseDown = false;
 
   var effectorSelected = false;
 
@@ -43,7 +47,7 @@ $(function(){
   	//camera
   	//width, height, fov, near, far, orthonear, ortho far
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth/ height, 1, 1000);
-    camera.position.z = 10;
+    camera.position.z = 7;
 
     //cameraO = new THREE.OrthographicCamera(window.innerWidth/-2, window.innerWidth/2, height/2, height/-2, 1, 1000);
 
@@ -62,7 +66,7 @@ $(function(){
     light2.position.set(-2, -1.5, -1);
     scene.add(light2);
 
-    material = new THREE.MeshLambertMaterial( { color: 0xbbbbbb } );
+    material = new THREE.MeshPhongMaterial( { color: 0xe7eaed } );
 
 
     plane = new THREE.Plane();
@@ -78,13 +82,9 @@ $(function(){
     loadEffector();
 
     if (window.WebGLRenderingContext){
-      console.log("before call");
       renderer = new THREE.WebGLRenderer({antialias: true});
-      console.log("after call");
     }else{
-      console.log("before canvas");
       renderer = new THREE.CanvasRenderer();
-      console.log("canvas render");
     }
     renderer.setSize(window.innerWidth, height );
     $("#content").html( renderer.domElement );
@@ -98,7 +98,7 @@ $(function(){
 
     /*lets make jquery style*/
     //renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
-    renderer.domElement.addEventListener( 'mouseup', onDocumentMouseDown);
+    renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp);
 
    //sets variable to false
     window.addEventListener( 'resize', onWindowResize);
@@ -150,7 +150,9 @@ $(function(){
     })
 
       $("#gender").click(function(){
+         console.log(SELECTED);
         if (male){
+
           scene.remove(objects[0]);
           animate();
           scene.add(objects_female[0]);
@@ -162,6 +164,8 @@ $(function(){
           male=true;
         }
       })
+    
+
     controls = new THREE.OrbitControls( camera, renderer.domElement );
     
 
@@ -169,6 +173,7 @@ $(function(){
     //mouse up checks if variable is true, then runs through ik algorithm and 
     renderer.domElement.addEventListener( 'mousedown', effectorClicked);
     renderer.domElement.addEventListener("mousemove", effectorMove );
+   // renderer.domElement.addEventListener("mousemove", rotateCamera );
     
 
     //on keydown set values to true, on keyup, set values to false
@@ -184,7 +189,7 @@ $(function(){
   }
 
   function animate() {
-    if (ALT){
+    if (!ALT){
       controls.enabled = false;
     }
     else{
@@ -198,7 +203,6 @@ $(function(){
       // note: three.js includes requestAnimationFrame shim
     requestAnimationFrame( animate );
     if(SELECTED && SELECTED.name == "root"){
-    //for (var i=0; i< )
       if (left){
       	SELECTED.position.x-=.1;
       }else if (right){
@@ -240,9 +244,7 @@ $(function(){
 
     if (perspective){
       renderer.render( scene, camera );
-    }/*else{
-       renderer.render( scene, cameraO);
-     }*/
+    }
 
   }
 
@@ -250,8 +252,8 @@ $(function(){
     if (effectorSelected){
       event.preventDefault();
       mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
-      mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
-      //console.log("move x: " + mouse.x + ", move y: "+ mouse.y);
+      mouse.y = -((event.clientY - 42)/$("canvas").height()) *2 +1; 
+
       var vector = new THREE.Vector3(mouse.x, mouse.y, 0);
       projector.unprojectVector( vector, camera );
       var dir = vector.sub( camera.position ).normalize();
@@ -264,15 +266,13 @@ $(function(){
       e_pt.position.x = pos.x;
       e_pt.position.y = pos.y;
       e_pt.position.z = pos.z;
-      // var eff_pt = new THREE.Vector3();
-      // eff_pt.setFromMatrixPosition( e_pt.children[0].matrixWorld );
+
       var point = new THREE.Vector3( e_pt.position.x, e_pt.position.y, e_pt.position.z);
      
       var e_pt = effector_pt[0];
       var eff_pt = new THREE.Vector3();
       eff_pt = getGlobalLoc(e_pt);
       ccd(eff_pt);
-     // ccd(eff_pt);
     }
   }
 
@@ -282,7 +282,7 @@ $(function(){
       selectedPt = getGlobalLoc(SELECTED);
         var dist = new THREE.Vector3(effectPoint.x - selectedPt.x, effectPoint.y - selectedPt.y, effectPoint.z - selectedPt.z);
         
-        console.log("<" +effectPoint.x + ", " + effectPoint.y + ", " + effectPoint.z + ">");
+        // console.log("<" +effectPoint.x + ", " + effectPoint.y + ", " + effectPoint.z + ">");
         if (dist.length() > 0.004){
          for (var i = 0; i < 10; i++){  
 
@@ -294,7 +294,7 @@ $(function(){
             }else{
               var curJointPt = new THREE.Vector3();
               curJointPt = getGlobalLoc(curJoint);
-              console.log("<<" +curJointPt.x + ", " + curJointPt.y + ", " + curJointPt.z + ">>");
+              // console.log("<<" +curJointPt.x + ", " + curJointPt.y + ", " + curJointPt.z + ">>");
               var pc = new THREE.Vector3(selectedPt.x - curJointPt.x, selectedPt.y - curJointPt.y, selectedPt.z - curJointPt.z);
               var pt = new THREE.Vector3(effectPoint.x - curJointPt.x, effectPoint.y - curJointPt.y, effectPoint.z - curJointPt.z);
               
@@ -312,37 +312,110 @@ $(function(){
               }
 
               var crossU = new THREE.Vector3(cross.normalize().x, cross.normalize().y, cross.normalize().z);
-              var xrot = crossU.x * theta;
-              var yrot = crossU.y * theta;
-              var zrot = crossU.z * theta;
+              var xrot = crossU.x * dot;
+              var yrot = crossU.y * dot;
+              var zrot = crossU.z * dot;
               
               blurX(curJoint, xrot);
               blurY(curJoint, yrot);
               blurZ(curJoint, zrot);
-
-              // curJoint.rotation.x = xrot; 
-              // curJoint.rotation.y = yrot;  
-              // curJoint.rotation.z = zrot; 
 
               curJoint = curJoint.parent;
               update();
             }
           }
         }
-        // }
       }
     }
   }
 
-//objects position gives coordinates of distance from object to parent.  .length would give "bone length"
-//can get rotation of object
-//from root to joint, keep track of x, y, z coordinates ang = acos (y/length) length* cos (angle) = y; z*tan(angle) = x 
+  /*function rotateCamera(){
+    if (ALT){
 
-/* NewPoint.X = Start.X + distance * Cos(longitudeAngle) * Cos(latitudeAngle);
- NewPoint.Y = Start.Y + distance * Sin(longitudeAngle) * Cos(latitudeAngle);
- NewPoint.Z = Start.Z + distance * Sin(latitudeAngle);*/
+      if ( mouseDown ) {
 
- function getGlobalLoc(joint){
+        theta = - ( ( event.clientX - mouse.x ) * 0.5 )
+                + lastmouse.x;
+        phi = ( ( event.clientY - mouse.y ) * 0.5 )
+              + lastmouse.y;
+
+        phi = Math.min( 180, Math.max( 0, phi ) );
+
+        camera.position.x = 10 * Math.sin( theta * Math.PI / 360 )
+                            * Math.cos( phi * Math.PI / 360 );
+        camera.position.y = 10 * Math.sin( phi * Math.PI / 360 );
+        camera.position.z = 10 * Math.cos( theta * Math.PI / 360 )
+                            * Math.cos( phi * Math.PI / 360 );
+        camera.updateMatrix();
+
+        console.log(camera)
+    }
+
+   /* mouse3D = projector.unprojectVector(
+        new THREE.Vector3(
+            ( event.clientX / renderer.domElement.width ) * 2 - 1,
+            - ( event.clientY / renderer.domElement.height ) * 2 + 1,
+            0.5
+        ),
+        camera
+    ); 
+
+    update();
+   // ray.direction = mouse3D.subSelf( camera.position ).normalize();
+
+    //interact();
+    //render();
+
+    //   event.preventDefault();
+    //   mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
+    //   mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
+
+    //   var difx = mouse.x - lastmouse.x;
+    //   var dify = mouse.y - lastmouse.y;
+
+      
+    //   console.log(camera);
+    //   if (difx > 0){
+    //     //rotate to the right
+    //     longitudinal = 1;
+    //     if (longitudinal > 360 || longitudinal < 0){
+    //       longitudinal = 0;
+    //     }
+    //   }
+    //   if (difx < 0){
+    //     //rotate to the left
+    //     longitudinal = -1;
+    //     // if (longitudinal > 360 || longitudinal < 0){
+    //     //   longitudinal = 0;
+    //     // }
+    //   }
+    //   if (dify > 0){
+    //     //rotate up
+    //     latitudinal = 1;
+    //     if (latitudinal > 360 || latitudinal < 0){
+    //       latitudinal = 0;
+    //     }
+    //   }
+    //   if (dify < 0){
+    //     //rotate down
+    //     latitudinal = -1;
+    //       // if (latitudinal > 360 || latitudinal < 0){
+    //       //   latitudinal = 0;
+    //       // }
+    //   }
+    //   //camera.position.z=0;
+    //   //update();
+    //   camera.rotateOnAxis (new THREE.Vector3( 0, 1, 0),longitudinal * degToRad);//Math.cos(longitudinal * degToRad) * Math.cos(latitudinal * degToRad);
+    //   camera.rotateOnAxis (new THREE.Vector3( 1, 0, 0),latitudinal * degToRad);//Math.sin(longitudinal * degToRad) * Math.cos(latitudinal * degToRad);
+    //   camera.rotation.z = 0;//10 + Math.sin(latitudinal * degToRad);
+    //   camera.position.z = 10;
+
+    //   lastmouse.x = mouse.x;
+    //   lastmouse.y = mouse.y;
+    }
+  }
+*/
+  function getGlobalLoc(joint){
     var retVect = new THREE.Vector3();
     retVect.x = 0;
     retVect.y = 0;
@@ -390,12 +463,18 @@ $(function(){
  }
 
   function effectorClicked(event){
-    if (effector && ALT){
-      event.preventDefault();
+    event.preventDefault();
       mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
       mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
-      console.log("x: " + mouse.x + ", y: "+ mouse.y);
 
+
+    if (ALT){
+      lastmouse.x = mouse.x;
+      lastmouse.y = mouse.y;
+      mouseDown = true;
+    }
+    if (effector && !ALT){
+      
       var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
       projector.unprojectVector(vector, camera);
       var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
@@ -414,7 +493,8 @@ $(function(){
     }
   }
 
-  function onDocumentMouseDown( event ) {
+  function onDocumentMouseUp( event ) {
+    mouseDown = false;
     var joint_selector, object_selector;
     if (effectorSelected){
       
@@ -423,7 +503,7 @@ $(function(){
       { color: 0x077684, opacity: 1 } ); 
       
     }
-    else if (ALT == true){
+    else if (!ALT){
       event.preventDefault();
       mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
       mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
@@ -446,14 +526,13 @@ $(function(){
 
         var joint = contains(joint_selector, intersected);
         if (SELECTED){
-          console.log(SELECTED);
           if (SELECTED != intersected[0].object.parent){
             if (joint){
 
             SELECTED.children[0].material = material;
             SELECTED = joint;
             SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-        { color: 0x676767, opacity: 0.75 } ); 
+        { color: 0x5b6b7a, opacity: 1 } ); 
             }
           }
         }
@@ -461,7 +540,7 @@ $(function(){
           if (joint){
             SELECTED = joint;
             SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-        { color: 0x676767, opacity: 0.75 } ); 
+        { color: 0x5b6b7a, opacity: 1 } ); 
           }
         }
       }
