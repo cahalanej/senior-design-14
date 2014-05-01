@@ -305,7 +305,7 @@ function loadFemale(){
       { color: 0xe7eaed, opacity: 1 } );
 
     loader.load("f_torso.obj", function(torso){
-      torso.position.y = .912;
+      torso.position.y = 0.903;
       torso.children[0].material = new THREE.MeshPhongMaterial( 
         { color: 0xe7eaed, opacity: 1 } );
 
@@ -313,18 +313,18 @@ function loadFemale(){
 
         loader.load("f_head.obj", function(head){
           head.position.x = 0;
-          head.position.y=0.643;
-          head.position.z=0.073;
+          head.position.y=0.418;
+          head.position.z=0.134;
           head.children[0].material = new THREE.MeshPhongMaterial( 
             { color: 0xe7eaed, opacity: 1 } );
 
           loader.load("f_rshoulder.obj", function(lshouldered){
 
             loader.load("f_ruarm.obj", function(luarm){
-              luarm.position.x = .55;
-              luarm.position.y = -.011;
-              luarm.position.z= -.012;
-              luarm.scale.x = 1;
+              luarm.position.x = 0.508;
+              luarm.position.y = 0.023;
+              luarm.position.z= -0.025;
+               luarm.scale.x = -1;
               luarm.scale.y = -1;
               luarm.children[0].material = new THREE.MeshPhongMaterial( 
                 { color: 0xe7eaed, opacity: 1 } );
@@ -332,9 +332,9 @@ function loadFemale(){
               loader.load("f_relbow.obj", function(lelbowed){
 
                 loader.load("f_rlarm.obj", function(llarm){
-                  llarm.position.x=.663;
-                  llarm.position.y=0.126;
-                  llarm.position.z=-.009;
+                  llarm.position.x=0.641;
+                  llarm.position.y=0.158;
+                  llarm.position.z=0.031;
                   llarm.scale.x = -1;
                   llarm.scale.y = -1;
                   llarm.children[0].material = new THREE.MeshPhongMaterial( 
@@ -343,9 +343,9 @@ function loadFemale(){
                   loader.load("f_rshoulder.obj", function(rshouldered){
 
                     loader.load("f_ruarm.obj", function(ruarm){
-                      ruarm.position.x = -0.55;
-                      ruarm.position.y = -0.011;
-                      ruarm.position.z=-0.012;
+                      ruarm.position.x = -0.508;
+                      ruarm.position.y = 0.023;
+                      ruarm.position.z=-0.025;
                       ruarm.scale.x= 1;
                       ruarm.scale.y=1;
                       ruarm.children[0].material = new THREE.MeshPhongMaterial(
@@ -354,9 +354,9 @@ function loadFemale(){
                       loader.load("f_relbow.obj", function(relbowed){
 
                         loader.load("f_rlarm.obj", function(rlarm){
-                          rlarm.position.x=-0.663;
-                          rlarm.position.y=-0.126;
-                          rlarm.position.z=-0.009;
+                          rlarm.position.x=-0.641;
+                          rlarm.position.y=-0.158;
+                          rlarm.position.z=0.031;
                           rlarm.scale.x= 1;
                           rlarm.scale.y =1;
                           rlarm.children[0].material = new THREE.MeshPhongMaterial( 
@@ -370,7 +370,7 @@ function loadFemale(){
                             pelvis.children[0].material = new THREE.MeshPhongMaterial( 
                               { color: 0xe7eaed, opacity: 1 } );
 
-                            root.position.y = .427;
+                            root.position.y = 0.467;
                             root.position.x= 0;//-1.503;
 
                             loader.load("f_rhip.obj", function(lhip){
@@ -378,17 +378,17 @@ function loadFemale(){
                               loader.load("f_rhip.obj", function(rhip){
 
                                 loader.load("f_ruleg.obj", function(luleg){
-                                  luleg.position.x=0;
-                                  luleg.position.y=-0.753;
-                                  luleg.position.z=0.126;
-                                  luleg.scale.x = 1;
+                                  luleg.position.x=-0.089;
+                                  luleg.position.y=-0.6;
+                                  luleg.position.z=0.089;
+                                  luleg.scale.x = -1;
                                   luleg.children[0].material = new THREE.MeshPhongMaterial( 
                                     { color: 0xe7eaed, opacity: 1 } );
 
                                   loader.load("f_ruleg.obj", function(ruleg){
-                                    ruleg.position.x=0;
-                                    ruleg.position.y=-0.753;
-                                    ruleg.position.z=0.126;
+                                    ruleg.position.x=-0.089;
+                                    ruleg.position.y=-0.6;
+                                    ruleg.position.z=0.089;
                                     ruleg.scale.x = -1;
                                     ruleg.scale.y = 1;
                                     ruleg.children[0].material = new THREE.MeshPhongMaterial( { color: 0xe7eaed, opacity: 1 } );
@@ -409,80 +409,80 @@ function loadFemale(){
                                             rlleg.position.x=0.058;
                                             rlleg.position.y=-1.007;
                                             rlleg.position.z=0;
-                                            //rlleg.scale.x = -1;
-                                            //rlleg.scale.y = -1;
                                             rlleg.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
                                             var neck = necked;
-                                            neck.position.y = .643;
-                                            neck.position.z=-.10;
+                                            neck.position.y = 0.674;
+                                            neck.position.z=-0.224;
                                             neck.name = "neck";
                                             neck.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
                                             var lshoulder = lshouldered;
-                                            lshoulder.position.x=0.853;
-                                            lshoulder.position.y=.219;
-                                            lshoulder.position.z=-0.158;
+                                            lshoulder.position.x=0.549;
+                                            lshoulder.position.y=0.414;
+                                            lshoulder.position.z=-0.326;
                                             lshoulder.name = "right-shoulder";
                                             lshoulder.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
                                             var lelbow=lelbowed;
-                                            lelbow.position.x=0.369;
-                                            lelbow.position.y=0;
-                                            lelbow.position.z=0.04;
-                                            lelbow.scale.y = -1;
+                                            lelbow.position.x=-0.519;
+                                            lelbow.position.y=0.013;
+                                            lelbow.position.z=0.032;
+                                              lelbow.scale.x = -1;
+                                             lelbow.scale.y = -1;
                                             lelbow.name= "right-elbow";
                                             lelbow.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
                                             var rshoulder = rshouldered;
-                                            rshoulder.position.x=-0.853;
-                                            rshoulder.position.y=.219;
-                                            rshoulder.position.z=-0.158;
+                                            rshoulder.position.x=-0.549;
+                                            rshoulder.position.y=0.414;
+                                            rshoulder.position.z=-0.326;
                                             rshoulder.scale.x= 1;
                                             rshoulder.name = "left-shoulder";
                                             rshoulder.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
                                             var relbow=relbowed;
-                                            relbow.position.x=-0.369;
-                                            relbow.position.y=0;
-                                            relbow.position.z=0.04;
+                                            relbow.position.x=-0.519;
+                                            relbow.position.y=0.013;
+                                            relbow.position.z=0.032;
                                             relbow.scale.x= 1;
                                             relbow.scale.y= 1;
                                             relbow.name ="left-elbow";
                                             relbow.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
-                                            lhip.position.x=0.402;
-                                            lhip.position.y=-0.231;
-                                            lhip.position.z=-0.011;
+                                            lhip.position.x=0.3;
+                                            lhip.position.y=-0.082;
+                                            lhip.position.z=0;
                                             lhip.name = "right-hip";
                                             lhip.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
-                                            rhip.position.x=-0.402;
-                                            rhip.position.y=-0.231;
-                                            rhip.position.z=-0.011;
+                                            rhip.position.x=-0.3;
+                                            rhip.position.y=-0.082;
+                                            rhip.position.z=0;
                                             rhip.scale.x = 1;
                                             rhip.scale.y = 1;
                                             rhip.name = "left-hip";
                                             rhip.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
-                                            lknee.position.x=0.115;
-                                            lknee.position.y=-0.691;
-                                            lknee.position.z=0.032;
+                                            lknee.position.x=0.021;
+                                            lknee.position.y=-0.851;
+                                            lknee.position.z=0.11;
                                             lknee.name = "right-knee";
+                                            lknee.scale.x = -1;
                                             lknee.children[0].material = new THREE.MeshPhongMaterial( 
                                               { color: 0xe7eaed, opacity: 1 } );
 
-                                            rknee.position.x=-.115;
-                                            rknee.position.y=-.691;
-                                            rknee.position.z=.032;
+                                            rknee.position.x=-0.021;
+                                            rknee.position.y=-0.851;
+                                            rknee.position.z=0.11;
                                             rknee.scale.x = -1;
                                             rknee.name = "left-knee";
                                             rknee.children[0].material = new THREE.MeshPhongMaterial( 
@@ -591,6 +591,9 @@ function loadEffector(){
   loader.load("neck.obj", function(effector){
     effector.name = "effector";
     effector.position.x = 4;
+    effector.scale.x = .75;
+    effector.scale.y = .75;
+    effector.scale.z = .75;
     effector.children[0].material = new THREE.MeshPhongMaterial( 
       { color: 0x077684, opacity: 1 } ); 
     effector_pt.push(effector);
