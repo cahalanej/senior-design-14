@@ -169,7 +169,7 @@ function toggleRoot(){
             joint.rotation.y = 89 * degToRad;
           }
           else{
-            joine.rotaion.y = rotVal;  
+            joint.rotation.y = rotVal;  
           }
         }
       }

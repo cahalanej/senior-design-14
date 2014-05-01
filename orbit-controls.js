@@ -70,6 +70,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 	// The four arrow keys
 	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
 
+	this.aboutY;
+	this.aboutX;
 	////////////
 	// internals
 
@@ -123,6 +125,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 		}
 
 		thetaDelta -= angle;
+		this.aboutY = thetaDelta;
 
 	};
 
@@ -135,7 +138,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 		}
 
 		phiDelta -= angle;
-
 	};
 
 	// pass in distance in world space to move left
@@ -267,6 +269,10 @@ THREE.OrbitControls = function ( object, domElement ) {
 		position.copy( this.target ).add( offset );
 
 		this.object.lookAt( this.target );
+		
+		this.aboutY = theta;
+		this.aboutX = phi;
+
 
 		thetaDelta = 0;
 		phiDelta = 0;

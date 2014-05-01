@@ -1,6 +1,7 @@
 $(function(){
 	var camera, cameraO, renderer;
   var geometry, material, mesh, plane;
+  var offset = 1.0 * degToRad;
 
   var cameraObject;
 	//translate 
@@ -109,14 +110,41 @@ $(function(){
       var rotVal = e.target.value * degToRad;
       blurX(SELECTED, rotVal);
     });
+    $("#x-back").click(function(){
+      var xRot = SELECTED.rotation.x + offset;
+        blurX(SELECTED, xRot);
+    });
+    $("#x-forward").click(function(){
+        var xRot = SELECTED.rotation.x - offset;
+        blurX(SELECTED, xRot);
+    });
+
     $("#y-rot").blur(function(e){
       var rotVal = e.target.value * degToRad;
       blurY(SELECTED, rotVal);
     });
-      $("#z-rot").blur(function(e){
+    $("#y-back").click(function(){
+      var yRot = SELECTED.rotation.y - offset;
+        blurY(SELECTED, yRot);
+    });
+    $("#y-forward").click(function(){
+        var yRot = SELECTED.rotation.y + offset;
+        blurY(SELECTED, yRot);
+    });
+
+    $("#z-rot").blur(function(e){
       var rotVal = e.target.value * degToRad;
       blurZ(SELECTED, rotVal);
     });
+    $("#z-back").click(function(){
+      var zRot = SELECTED.rotation.z + offset;
+        blurZ(SELECTED, zRot);
+    });
+    $("#z-forward").click(function(){
+        var zRot = SELECTED.rotation.z - offset;
+        blurZ(SELECTED, zRot);
+    });
+
     $(".ik_fk").click(function(e){
       toggleIK(e);
     })
@@ -145,7 +173,6 @@ $(function(){
 
     //on keydown set values to true, on keyup, set values to false
     //in function that updates if values true;
-
     $("#info-btn").on("click", function(){
       toggleInfo();
     });
@@ -167,7 +194,7 @@ $(function(){
     var xAxis = new THREE.Vector3(1, 0, 0);
     var yAxis = new THREE.Vector3(0, 1, 0);
     var zAxis = new THREE.Vector3(0, 0, 1);
-    var offset = 1.0 * degToRad;
+    
       // note: three.js includes requestAnimationFrame shim
     requestAnimationFrame( animate );
     if(SELECTED && SELECTED.name == "root"){
@@ -189,190 +216,24 @@ $(function(){
     if (SELECTED){
             //rotate
       if (cwX){
-        if (SELECTED.name == "right-elbow" || SELECTED.name == "left-elbow")
-        {}
-        else{  
-          SELECTED.rotation.x -= offset;
-        }
+        var cwxRot = SELECTED.rotation.x - offset;
+        blurX(SELECTED, cwxRot);
       }else if (ccwX){
-        if (SELECTED.name == "right-elbow" || SELECTED.name == "left-elbow")
-        {}
-        else{  
-           SELECTED.rotation.x += offset;
-        }
+        var ccwxRot = SELECTED.rotation.x + offset;
+        blurX(SELECTED, ccwxRot);
       }else if (cwY){
-        if (SELECTED.name == "right-knee" || SELECTED.name == "left-knee")
-        {}
-        else{  
-            SELECTED.rotation.y += offset;
-        }
+        var cwyRot = SELECTED.rotation.y + offset;
+        blurY(SELECTED, cwyRot);
       }else if (ccwY){
-        if (SELECTED.name == "right-knee" || SELECTED.name == "left-knee")
-          {}
-        else{  
-          SELECTED.rotation.y -= offset;
-        }
+        var ccwyRot = SELECTED.rotation.y - offset;
+        blurY(SELECTED, ccwyRot);
       }else if (cwZ){
-        if (SELECTED.name == "right-knee" || SELECTED.name == "left-knee" || SELECTED.name == "right-elbow" || SELECTED.name == "left-elbow")
-        {}
-        else{  
-          SELECTED.rotation.z -= offset;
-        }
+        var cwzRot = SELECTED.rotation.z - offset;
+        blurZ(SELECTED, cwzRot);
       }else if (ccwZ){
-        if (SELECTED.name == "right-knee" || SELECTED.name == "left-knee"|| SELECTED.name == "right-elbow" || SELECTED.name == "left-elbow")
-        {}
-        else{  
-          SELECTED.rotation.z += offset;
-        }
+        var ccwzRot = SELECTED.rotation.z + offset;
+        blurZ(SELECTED, ccwzRot);
       }
-      /*if (SELECTED._rotation._quaternion._y >= 360){
-          SELECTED._rotation._quaternion._y=0;
-      }*/
-    
-
-
-       //KNEE LIMITATIONS
-      if (SELECTED.name == "right-knee" || SELECTED.name == "left-knee"){
-        if (SELECTED._rotation._x < (-5*degToRad)){
-          SELECTED.rotation.x = (-5*degToRad);             
-        }
-        if (SELECTED._rotation._x > (150*degToRad)){
-          SELECTED.rotation.x = (150*degToRad);             
-        }
-      }
-
-      //ELBOW LIMITATIONS
-      if (SELECTED.name == "right-elbow" || SELECTED.name == "left-elbow"){
-        if (SELECTED._rotation._y > (10*degToRad)){
-          SELECTED.rotation.y = (10*degToRad);               
-        }
-        if (SELECTED._rotation._y < (-135*degToRad)){
-          SELECTED.rotation.y = (-135*degToRad);              
-        }
-      }
-            
-
-
-      //SHOULDER LIMITATIONS    
-      if (SELECTED.name == "right-shoulder" || SELECTED.name == "left-shoulder"){
-        if (SELECTED._rotation._x > (60*degToRad)){
-          SELECTED.rotation.x = (60*degToRad);   
-        }
-        if (SELECTED._rotation._x < (-180*degToRad)){
-          SELECTED.rotation.x = (-180*degToRad);  
-        }
-        if (SELECTED.name == "right-shoulder"){
-          if (SELECTED.rotation.y < (-130*degToRad)){
-            SELECTED.rotation.y = (-130*degToRad);  
-          }
-          if (SELECTED.rotation.y > (45*degToRad)){
-            SELECTED.rotateOnAxis(yAxis, -offset);         
-          }
-          if (SELECTED._rotation._z > (90*degToRad)){
-          SELECTED.rotateOnAxis(zAxis, -offset);
-          }
-          if (SELECTED._rotation._z < (-135*degToRad)){
-            SELECTED.rotateOnAxis(zAxis, offset);  
-          }
-        }
-        if (SELECTED.name == "left-shoulder"){
-          if (SELECTED._rotation._y < (-45*degToRad)){
-            SELECTED.rotation.y = (-45*degToRad);  
-          }
-          if (SELECTED._rotation._y > (135*degToRad)){
-            SELECTED.rotation.y = (135*degToRad);     
-          }
-          if (SELECTED._rotation._z < (-90*degToRad)){
-            SELECTED.rotation.z = (-90*degToRad);
-          }
-          if (SELECTED._rotation._z > (135*degToRad)){
-            SELECTED.rotation.z = (135*degToRad);  
-          }
-        }
-      }
-
-      //HIP LIMITATIONS    
-      if (SELECTED.name == "right-hip" || SELECTED.name == "left-hip"){
-        if (SELECTED._rotation._x > (30*degToRad)){
-          SELECTED.rotation.x = (30*degToRad);   
-        }
-        if (SELECTED._rotation._x < (-120*degToRad)){
-          SELECTED.rotation.x = (-120*degToRad);  
-        }
-        if (SELECTED.name == "right-hip"){
-          if (SELECTED._rotation._z > (170*degToRad)){
-            SELECTED.rotation.z = (170*degToRad);
-          }
-          if (SELECTED._rotation._z < (-20*degToRad)){
-            SELECTED.rotation.z = (-20*degToRad);  
-          }
-          if (SELECTED._rotation._y < (-40*degToRad)){
-            SELECTED.rotation.y = (-40*degToRad);  
-          }
-          if (SELECTED._rotation._y > (45*degToRad)){
-            SELECTED.rotation.y = (45*degToRad);       
-          }
-        }
-        if (SELECTED.name == "left-hip"){
-          if (SELECTED._rotation._z < (-170*degToRad)){
-            SELECTED.rotation.z = (-170*degToRad);
-          }
-          if (SELECTED._rotation._z > (20*degToRad)){
-            SELECTED.rotation.z = (20*degToRad);  
-          }
-          if (SELECTED._rotation._y < (-45*degToRad)){
-            SELECTED.rotation.y = (-45*degToRad); 
-          }
-          if (SELECTED._rotation._y > (40*degToRad)){
-            SELECTED.rotation.y = (40*degToRad);    
-          }
-        }
-      }
-
-      //NECK LIMITATIONS    
-      if (SELECTED.name == "neck"){
-        if (SELECTED._rotation._x > (70*degToRad)){
-          SELECTED.rotation.x = (70*degToRad);   
-        }
-        if (SELECTED._rotation._x < (-55*degToRad)){
-          SELECTED.rotation.x = (-55*degToRad);
-        }
-        if (SELECTED._rotation._z < (-35*degToRad)){
-          SELECTED.rotation.z = (-35*degToRad);
-        }
-        if (SELECTED._rotation._z > (35*degToRad)){
-          SELECTED.rotation.z = (35*degToRad); 
-        }
-        if (SELECTED._rotation._y < (-70*degToRad)){
-          SELECTED.rotation.y = (-70*degToRad);  
-        }
-        if (SELECTED._rotation._y > (70*degToRad)){
-          SELECTED.rotation.y = (70*degToRad); 
-        }
-      }
-
-      //LOWER BACK LIMITATIONS    
-      if (SELECTED.name == "lower-back"){
-        if (SELECTED._rotation._x > (77*degToRad)){
-          SELECTED.rotation.x = (77*degToRad);   
-        }
-        if (SELECTED._rotation._x < (-30*degToRad)){
-          SELECTED.rotation.x =  (-30*degToRad);
-        }
-        if (SELECTED._rotation._z < (-35*degToRad)){
-          SELECTED.rotation.z = (-35*degToRad);
-        }
-        if (SELECTED._rotation._z > (35*degToRad)){
-          SELECTED.rotation.z = (35*degToRad);  
-        }
-        if (SELECTED._rotation._y < (-40*degToRad)){
-          SELECTED.rotation.y = (-40*degToRad);  
-        }
-        if (SELECTED._rotation._y > (40*degToRad)){
-          SELECTED.rotation.y = (40*degToRad);     
-        }
-      }
-
     }
 
     update();
@@ -398,35 +259,42 @@ $(function(){
       var distance = - camera.position.z / dir.z;
 
       var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
+
       var e_pt = effector_pt[0];
       e_pt.position.x = pos.x;
       e_pt.position.y = pos.y;
       e_pt.position.z = pos.z;
-      var e_pt = effector_pt[0];
+      // var eff_pt = new THREE.Vector3();
+      // eff_pt.setFromMatrixPosition( e_pt.children[0].matrixWorld );
       var point = new THREE.Vector3( e_pt.position.x, e_pt.position.y, e_pt.position.z);
-      ccd(point);
+     
+      var e_pt = effector_pt[0];
+      var eff_pt = new THREE.Vector3();
+      eff_pt = getGlobalLoc(e_pt);
+      ccd(eff_pt);
+     // ccd(eff_pt);
     }
   }
 
   function ccd(effectPoint){
     if (SELECTED){
-      var selectedPt = new THREE.Vector3(SELECTED.position.x, SELECTED.position.y, SELECTED.position.z);
+      var selectedPt = new THREE.Vector3();
+      selectedPt = getGlobalLoc(SELECTED);
         var dist = new THREE.Vector3(effectPoint.x - selectedPt.x, effectPoint.y - selectedPt.y, effectPoint.z - selectedPt.z);
         
-        
+        console.log("<" +effectPoint.x + ", " + effectPoint.y + ", " + effectPoint.z + ">");
         if (dist.length() > 0.004){
          for (var i = 0; i < 10; i++){  
 
-          var curJointID = SELECTED.parent.name;
-          if (curJointID != "root");
-          // curJoint = scene.getObjectById(curJointID, true);
-          var curJoint = SELECTED.parent.parent;
+
+          var curJoint = SELECTED.parent;
           while (curJoint.name != "root"){
             if (curJoint.name == ""){
               curJoint = curJoint.parent;
             }else{
-              var curJointPt = new THREE.Vector3(curJoint.position.x, curJoint.position.y, curJoint.position.z);
-
+              var curJointPt = new THREE.Vector3();
+              curJointPt = getGlobalLoc(curJoint);
+              console.log("<<" +curJointPt.x + ", " + curJointPt.y + ", " + curJointPt.z + ">>");
               var pc = new THREE.Vector3(selectedPt.x - curJointPt.x, selectedPt.y - curJointPt.y, selectedPt.z - curJointPt.z);
               var pt = new THREE.Vector3(effectPoint.x - curJointPt.x, effectPoint.y - curJointPt.y, effectPoint.z - curJointPt.z);
               
@@ -444,15 +312,20 @@ $(function(){
               }
 
               var crossU = new THREE.Vector3(cross.normalize().x, cross.normalize().y, cross.normalize().z);
-              var xrot = -crossU.x * theta;
-              var yrot = -crossU.y * theta;
+              var xrot = crossU.x * theta;
+              var yrot = crossU.y * theta;
               var zrot = crossU.z * theta;
               
               blurX(curJoint, xrot);
               blurY(curJoint, yrot);
               blurZ(curJoint, zrot);
 
+              // curJoint.rotation.x = xrot; 
+              // curJoint.rotation.y = yrot;  
+              // curJoint.rotation.z = zrot; 
+
               curJoint = curJoint.parent;
+              update();
             }
           }
         }
@@ -460,6 +333,61 @@ $(function(){
       }
     }
   }
+
+//objects position gives coordinates of distance from object to parent.  .length would give "bone length"
+//can get rotation of object
+//from root to joint, keep track of x, y, z coordinates ang = acos (y/length) length* cos (angle) = y; z*tan(angle) = x 
+
+/* NewPoint.X = Start.X + distance * Cos(longitudeAngle) * Cos(latitudeAngle);
+ NewPoint.Y = Start.Y + distance * Sin(longitudeAngle) * Cos(latitudeAngle);
+ NewPoint.Z = Start.Z + distance * Sin(latitudeAngle);*/
+
+ function getGlobalLoc(joint){
+    var retVect = new THREE.Vector3();
+    retVect.x = 0;
+    retVect.y = 0;
+    retVect.z = 0;
+    if (joint && joint.name != "root"){
+      var parent = joint;
+      while (parent && parent.name != "root"){
+        if (parent.name == ""){
+          parent = parent.parent;
+        }else{
+          var x = parent._rotation._x;
+          var y = parent._rotation._y;
+          var z = parent._rotation._z;
+
+          var mat4 = new THREE.Matrix4();
+          mat4[0] = Math.cos(y)*Math.cos(z);
+          mat4[1] = -Math.cos(y)*Math.sin(z);
+          mat4[2] = Math.sin(y);
+          mat4[3] = 0;
+
+          mat4[4] = Math.cos(x)*Math.sin(z) + Math.cos(z)*Math.sin(x)*Math.sin(y);
+          mat4[5] = Math.cos(x)*Math.cos(z) - Math.sin(x)*Math.sin(y)*Math.sin(z);
+          mat4[6] = -Math.cos(y)*Math.sin(x);
+          mat4[7] = 0;
+
+          mat4[8] = Math.sin(x)*Math.sin(z) - Math.cos(x)*Math.cos(z)*Math.sin(y);
+          mat4[9] = Math.cos(z)*Math.sin(z) + Math.cos(z)*Math.sin(y)*Math.sin(z);
+          mat4[10] = Math.cos(x)*Math.cos(y);
+          mat4[11] = 0;
+
+          mat4[12] = 0;
+          mat4[13] = 0;
+          mat4[14] = 0;
+          mat4[15] = 1;
+
+          var pos = new THREE.Vector4(parent.position.x, parent.position.y, parent.position.z,1);
+          retVect.x += pos.applyMatrix4(mat4).x;
+          retVect.y += pos.applyMatrix4(mat4).y;
+          retVect.z += pos.applyMatrix4(mat4).z;
+          parent = parent.parent;
+        }
+      }
+    }
+   return retVect;
+ }
 
   function effectorClicked(event){
     if (effector && ALT){
@@ -493,6 +421,7 @@ $(function(){
       effectorSelected = false;
       effector_pt[0].children[0].material = new THREE.MeshPhongMaterial( 
       { color: 0x077684, opacity: 1 } ); 
+      
     }
     else if (ALT == true){
       event.preventDefault();
@@ -667,16 +596,16 @@ $(function(){
         cwZ = false;
         break;
       //toggle perspective
-      case 80:
+     /* case 80:
         if (perspective){
           perspective = false;
           /*let's also change the text in the controls div to alert users
-          that in orthographic mode*/
+          that in orthographic mode /
         }else{
           perspective = true;
           //change controls div to say perspective
         }
-        break;
+        break;*/
     }
   }
 
