@@ -1,109 +1,120 @@
+<!-- Jennifer Cahalane 2014 -->
+
 <DOCTYPE! html>
 <html>
-<head>
-	<title>Senior Design</title>
-	<script src="jquery.min.js" type="text/javascript"></script>
-	<script src="three.min.js"></script>
-	<script src="orbit-controls.js"></script>
-	<script src="obj-loader.js"></script>
-	<script src="file-loader.js" type="text/javascript"></script>
-	<script src="ui-script.js" type="text/javascript"></script>
+	<head>
+		<title>Senior Design</title>
+		<!-- JavaScript scripts not written by me -->
+		<script src="jquery.min.js" type="text/javascript"></script>
+		<script src="three.min.js"></script>
+		<script src="orbit-controls.js"></script>
+		<script src="obj-loader.js"></script>
 
-	<script src="script.js" type="text/javascript"></script>
+		<!-- JavaScript scripts written by me -->
+		<script src="file-loader.js" type="text/javascript"></script>
+		<script src="joint-limits.js" type="text/javascript"></script>
+		<script src="key-controls.js" type="text/javascript"></script>
+		<script src="ui-script.js" type="text/javascript"></script>
+		<script src="inverse-kinematics.js" type="text/javascript"></script>
+		<script src="script.js" type="text/javascript"></script>
 
-	<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
+		<!-- stylesheets -->
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
 
-	<div class="navbar">
-		<ul class="nav">
-			<div class="left">
-				<li class="nav-link" id="title">
-					<h3>Mannequin</h3>
-				</li>
-			</div>
-			<div class="right">
+		<!-- navbar -->
+		<div class="navbar">
+			<ul class="nav">
 				<div class="left">
-					<li class="nav-link">
-						<div class="btn" id="help-btn">
-							help
-						</div>
-					</li>
-					<li class="nav-link">
-						<div class="btn" id="info-btn">
-							info
-						</div>
+					<li class="nav-link" id="title">
+						<h3>Mannequin</h3>
 					</li>
 				</div>
-			</div>
-		</ul>
-	</div>
+				<div class="right">
+					<div class="left">
+						<li class="nav-link">
+							<div class="btn" id="help-btn">
+								help
+							</div>
+						</li>
+						<li class="nav-link">
+							<div class="btn" id="info-btn">
+								info
+							</div>
+						</li>
+					</div>
+				</div>
+			</ul>
+		</div>
 
-	<div class="hide dropdown" id="help">
-		<h3>Figure Controls</h3>
-		<p id="camera-trans">
-			move -- only on root </br>
-			a - move left</br>
-			d - move right</br>
-			w - move up</br>
-			s - move down</br>
-			q - zoom out </br>
-			e - zoom in</br>
-		</p>
-		<p id="camera-rotate">
-			rotate selected joint (and it's children) </br>
-			j - rotate counter clockwise about y</br>
-			l - rotate clockwise about y</br>
-			k - rotate counter clockwise about x</br>
-			i - rotate clockwise about y</br>
-			u - rotate counter clockwise about z </br>
-			o - rotate clockwise about z</br>
-		</p>
-		<p id="camera-type">
-			to select body part, click</br>
-			camera controls:</br>
-			alt + click and drag to rotate</br>
-			alt + trackpad scroll to zoom
-			alt + arrow keys to pan
+	<!-- help dropdown -->
+		<div class="hide dropdown" id="help">
+			<h3>Figure Controls</h3>
+			<p id="camera-trans">
+				move -- only on root </br>
+				a - move left</br>
+				d - move right</br>
+				w - move up</br>
+				s - move down</br>
+				q - zoom out </br>
+				e - zoom in</br>
+			</p>
+			<p id="camera-rotate">
+				rotate selected joint (and it's children) </br>
+				j - rotate counter clockwise about y</br>
+				l - rotate clockwise about y</br>
+				k - rotate counter clockwise about x</br>
+				i - rotate clockwise about y</br>
+				u - rotate counter clockwise about z </br>
+				o - rotate clockwise about z</br>
+			</p>
+			<p id="camera-type">
+				to select body part, click</br>
+				camera controls:</br>
+				alt + click and drag to rotate</br>
+				alt + trackpad scroll to zoom
+				alt + arrow keys to pan
 
-		</p>
-			</br>
+			</p>
 				</br>
-	</div>
+					</br>
+		</div>
 
-	<div class="hide dropdown" id="information">
-		<p>
-			<input type="radio" class="ik_fk" name="ik_fk" value="fk" checked>FK</input>
-			<input type="radio" class="ik_fk" name="ik_fk" value="ik">IK</input>
-		</p>
-		<button id="gender">toggle gender</button>
-		<p>Current Joint:</p><p id="joint" class="display">none</p>
-		<p>x:<input type="text" id="x-rot" class="rot display" placeholder="n/a"></input></p>
-		<p class="buttons">
-			<button id="x-back">ccw</button>
-			<button id="x-forward">cw</button>
-		</p>
-		<p>y:<input type="text" id="y-rot" class="rot display" placeholder="n/a"></input></p>
-		<p class="buttons">
-			<button id="y-back">ccw</button>
-			<button id="y-forward">cw</button>
-		</p>
-		<p>z:<input type="text" id="z-rot" class="rot display" placeholder="n/a"></input></p>
-		<p class="buttons">
-			<button id="z-back">ccw</button>
-			<button id="z-forward">cw</button>
-		</p>
-			<button id="select-root">select entire body</button>
+	<!-- interaction dropdown --> 
+		<div class="hide dropdown" id="information">
+			<p>
+				<input type="radio" class="ik_fk" name="ik_fk" value="fk" checked>FK</input>
+				<input type="radio" class="ik_fk" name="ik_fk" value="ik">IK</input>
+			</p>
+			<button id="gender">toggle gender</button>
+			<p>Current Joint:</p><p id="joint" class="display">none</p>
+			<p>x:<input type="text" id="x-rot" class="rot display" placeholder="n/a"></input></p>
+			<p class="buttons">
+				<button id="x-back">ccw</button>
+				<button id="x-forward">cw</button>
+			</p>
+			<p>y:<input type="text" id="y-rot" class="rot display" placeholder="n/a"></input></p>
+			<p class="buttons">
+				<button id="y-back">ccw</button>
+				<button id="y-forward">cw</button>
+			</p>
+			<p>z:<input type="text" id="z-rot" class="rot display" placeholder="n/a"></input></p>
+			<p class="buttons">
+				<button id="z-back">ccw</button>
+				<button id="z-forward">cw</button>
+			</p>
+				<button id="select-root">select entire body</button>
+			</br>
 		</br>
-	</br>
-	</br>
-	</br>
-	</div>
+		</br>
+		</br>
+		</div>
 
-	<div id="content"></div>
 
-	
+	<!-- webGL canvas -->
+		<div id="content"></div>
 
-</body>
+	</body>
 </html>
 

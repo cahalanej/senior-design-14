@@ -1,10 +1,85 @@
+/* 
+Jennifer Cahalane 
+Senior Design - Spring 2014 
+Contains: functions to handle resize, specific button clicks, and joint selection
+*/  
+
+
+
+/*
+  _______  __        ______   .______        ___       __      
+ /  _____||  |      /  __  \  |   _  \      /   \     |  |     
+|  |  __  |  |     |  |  |  | |  |_)  |    /  ^  \    |  |     
+|  | |_ | |  |     |  |  |  | |   _  <    /  /_\  \   |  |     
+|  |__| | |  `----.|  `--'  | |  |_)  |  /  _____  \  |  `----.
+ \______| |_______| \______/  |______/  /__/     \__\ |_______|
+*/ 
+
 var SELECTED, LAST_SELECTED=0;
 var effector = false;
 var ALT = false;
 var degToRad = 3.14/180.0;
 
+var mouseDown = false;
+var effectorSelected = false;
+var mouse = {x:0, y:0};
+var lastmouse = {x: 0, y: 0};
+var renderer;
+var camera, cameraObject;
+var projector;
+var height;
+var male=true;
+var material;
 
 
+
+/*
+ _______  __    __  .__   __.   ______ .___________. __    ______   .__   __.      _______.
+|   ____||  |  |  | |  \ |  |  /      ||           ||  |  /  __  \  |  \ |  |     /       |
+|  |__   |  |  |  | |   \|  | |  ,----'`---|  |----`|  | |  |  |  | |   \|  |    |   (----`
+|   __|  |  |  |  | |  . `  | |  |         |  |     |  | |  |  |  | |  . `  |     \   \    
+|  |     |  `--'  | |  |\   | |  `----.    |  |     |  | |  `--'  | |  |\   | .----)   |   
+|__|      \______/  |__| \__|  \______|    |__|     |__|  \______/  |__| \__| |_______/    
+*/
+
+//resizes webGL renderer if the window is resized
+function onWindowResize(){
+
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize( window.innerWidth, window.innerHeight );
+
+  var infoHeight = window.innerHeight - $(".navbar").height();
+  $(".dropdown").height(infoHeight);
+
+}
+
+//Toggles the information display
+function toggleInfo(){
+  if ($("#information").hasClass("hide")){
+    if (!$("#help").hasClass("hide")){
+      $("#help").addClass("hide");
+    }
+    $("#information").removeClass("hide");
+  }else{
+    $("#information").addClass("hide");
+  }
+}
+
+//toggles the help display
+function toggleHelp(){
+  if ($("#help").hasClass("hide")){
+    if (!$("#information").hasClass("hide")){
+      $("#information").addClass("hide");
+    }
+    $("#help").removeClass("hide");
+  }else{
+    $("#help").addClass("hide");
+  }
+}
+
+//toggles between Forward Kinematics and Inverse Kinematics
 function toggleIK(e){
   if(e.target.value == "ik"){
     scene.add(effector_pt[0]);
@@ -15,368 +90,97 @@ function toggleIK(e){
   }
 }
 
+//Toggles between selecting a joint and selecting the entire model
 function toggleRoot(){
   var material = new THREE.MeshPhongMaterial( { color: 0xe7eaed } );
-    if (SELECTED && SELECTED.name == "root"){
-      SELECTED.children[0].material = material;
-      
-      if (LAST_SELECTED != 0){
+  if (SELECTED && SELECTED.name == "root"){
+    SELECTED.children[0].material = material;
+    
+    if (LAST_SELECTED != 0){
 
-        SELECTED = scene.getObjectById(LAST_SELECTED,true);
-        if (SELECTED){
-          SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-          { color: 0x5b6b7a, opacity: 1} ); 
-        }
-      }else{
-       SELECTED = null;
-      }
-    }
-    else{
+      SELECTED = scene.getObjectById(LAST_SELECTED,true);
       if (SELECTED){
-        SELECTED.children[0].material = material;
-        LAST_SELECTED = SELECTED.id;
+        SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
+        { color: 0x5b6b7a, opacity: 1} ); 
       }
-      SELECTED = scene.getObjectByName("root",true);
-      SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
-        { color: 0x5b6b7a, opacity: 1 } ); 
+    }else{
+     SELECTED = null;
     }
   }
-  
-  function blurX(joint, rotVal){
-    if (joint){
-      if (joint.name == "root"){
-        joint.rotation.x = rotVal;
-      }
-       //KNEE LIMITATIONS
-      if (joint.name == "right-knee" || joint.name == "left-knee"){
-        if (rotVal < (-5*degToRad)){
-          joint.rotation.x = -5*degToRad;  
-        }
-        else if (rotVal > (150*degToRad)){
-          joint.rotation.x = 150 * degToRad;
-        }
-        else{
-          joint.rotation.x = rotVal;             
-        }
-      }
-
-      //ELBOW LIMITATIONS
-      if (joint.name == "right-elbow" || joint.name == "left-elbow"){
-      }
-            
-      //SHOULDER LIMITATIONS    
-      if (joint.name == "right-shoulder" || joint.name == "left-shoulder"){
-        if (rotVal > (150*degToRad)){
-          joint.rotation.x = 150*degToRad;
-        }
-        else if (rotVal < (-90*degToRad)){
-          joint.rotation.x = -90*degToRad;
-        }
-        else{
-          joint.rotation.x = rotVal;   
-        }
-      }
-
-      //HIP LIMITATIONS    
-      if (joint.name == "right-hip" || joint.name == "left-hip"){
-        if (rotVal > (30 * degToRad)){
-          joint.rotation.x = 30 * degToRad;
-        }
-        else if (rotVal < (-120 * degToRad)){
-          joint.rotation.x = -120 * degToRad;
-        }
-        else{
-          joint.rotation.x = rotVal;   
-        }
-      }
-
-      //NECK LIMITATIONS    
-      if (joint.name == "neck"){
-        if (rotVal > (70 * degToRad)){
-          joint.rotation.x = 70 * degToRad;
-        }
-        else if (rotVal < (-55 * degToRad)){
-          joint.rotation.x = -55 * degToRad;
-        }
-        else{
-          joint.rotation.x = rotVal;   
-        }
-      }
-
-      //LOWER BACK LIMITATIONS    
-      if (joint.name == "lower-back"){
-        if (rotVal > (77*degToRad)){
-          joint.rotation.x = 77 * degToRad;
-        }
-        else if (rotVal < (-30 * degToRad)){
-          joint.rotation.x = -30 * degToRad;
-        }
-        else{
-          joint.rotation.x = rotVal;   
-        }
-      }
-    }
-
-    update();
-
-    $("#x-rot").val("")
-  }
-
-  function blurY(joint, rotVal){
-    if (joint){
-      if (joint.name == "root"){
-        joint.rotation.y = rotVal;
-      }
-       //KNEE LIMITATIONS
-      if (joint.name == "right-knee" || joint.name == "left-knee"){
-      }
-
-      //ELBOW LIMITATIONS
-      if (joint.name == "left-elbow"){
-        if (rotVal < (-10 * degToRad)){
-          joint.rotation.y = -10 * degToRad;
-        }
-        else if (rotVal > (135 * degToRad)){
-          joint.rotation.y = 135 * degToRad;
-        }
-        else{
-          joint.rotation.y = rotVal;               
-        }
-      }
-
-       if (joint.name == "right-elbow"){
-        if (rotVal > (10 * degToRad)){
-          joint.rotation.y = 10 * degToRad;
-        }
-        else if (rotVal < (-135 * degToRad)){
-          joint.rotation.y = -135 * degToRad;
-        }
-        else{
-          joint.rotation.y = rotVal;               
-        }
-       }
-            
-
-
-      //SHOULDER LIMITATIONS    
-      if (joint.name == "right-shoulder" || joint.name == "left-shoulder"){
-        if (joint.name == "right-shoulder"){
-          if (rotVal < (-130 * degToRad)){
-            joint.rotation.y = -130 * degToRad; 
-          }
-          else if (rotVal > (45 * degToRad)){
-            joint.rotation.y = 45 * degToRad;
-          }
-          else{
-            joint.rotation.y = rotVal;  
-          }
-        }
-        if (joint.name == "left-shoulder"){
-          if (rotVal < (-45 * degToRad)){
-            joint.rotation.y = -45 * degToRad; 
-          }
-          else if (rotVal > (89 * degToRad)){
-            joint.rotation.y = 89 * degToRad;
-          }
-          else{
-            joint.rotation.y = rotVal;  
-          }
-        }
-      }
-
-      //HIP LIMITATIONS    
-      if (joint.name == "right-hip" || joint.name == "left-hip"){
-        if (joint.name == "right-hip"){
-          if (rotVal < (-40 * degToRad)){
-            joint.rotation.y = -40 * degToRad;
-          }
-          else if (rotVal > (45 * degToRad)){
-            joint.rotation.y = 45 * degToRad;
-          }
-          else{
-            joint.rotation.y = rotVal;  
-          }
-        }
-        if (joint.name == "left-hip"){
-          if (rotVal < (-45 * degToRad)){
-            joint.rotation.y = -45 * degToRad;
-          }
-          else if (rotVal > (40 * degToRad)){
-            joint.rotation.y = 40 * degToRad;
-          }
-          else{
-            joint.rotation.y = rotVal;  
-          }
-        }
-      }
-
-      //NECK LIMITATIONS    
-      if (joint.name == "neck"){
-        if (rotVal < (-70 * degToRad)){
-          joint.rotation.y = -70 * degToRad;
-        }
-        else if (rotVal > (70 * degToRad)){
-          joint.rotation.y = 70 * degToRad;
-        }
-        else{
-          joint.rotation.y = rotVal;  
-        }
-      }
-
-      //LOWER BACK LIMITATIONS    
-      if (joint.name == "lower-back"){
-        if (rotVal < (-40 * degToRad)){
-          joint.rotation.y = -40 * degToRad;
-        }
-        else if (rotVal > (40 * degToRad)){
-          joint.rotation.y = 40 * degToRad;
-        }
-        else{
-          joint.rotation.y = rotVal;  
-        }
-      }
-    }
-
-    update();
-
-    $("#y-rot").val("")
-  }
-
-  function blurZ(joint, rotVal){
-    if (joint){
-      if (joint.name == "root"){
-        joint.rotation.z = rotVal;
-      }
-       //KNEE LIMITATIONS
-      if (joint.name == "right-knee" || joint.name == "left-knee"){
-      }
-
-      //ELBOW LIMITATIONS
-      if (joint.name == "right-elbow" || joint.name == "left-elbow"){
-      }
-            
-      //SHOULDER LIMITATIONS    
-      if (joint.name == "right-shoulder" || joint.name == "left-shoulder"){
-        if (joint.name == "right-shoulder"){
-          if (rotVal > (90 * degToRad)){
-            joint.rotation.z = 90 * degToRad;
-          }
-          else if (rotVal < (-135 * degToRad)){
-            joint.rotation.z = -135 * degToRad;
-          }
-          else{
-            joint.rotation.z = rotVal;
-          }
-        }
-        if (joint.name == "left-shoulder"){
-          if (rotVal < (-90 * degToRad)){
-            joint.rotation.z = -90 * degToRad;
-          }
-          else if (rotVal > (135 * degToRad)){
-            joint.rotation.z = 135 * degToRad;
-          }
-          else{
-            joint.rotation.z = rotVal;
-          }
-        }
-      }
-
-      //HIP LIMITATIONS    
-      if (joint.name == "right-hip" || joint.name == "left-hip"){
-        if (joint.name == "right-hip"){
-          if (rotVal > (90 * degToRad)){
-            joint.rotation.z = 90 * degToRad;
-          }
-          else if (rotVal < (-20 * degToRad)){
-            joint.rotation.z = -20 * degToRad;
-          }
-          else{
-            joint.rotation.z = rotVal;
-          }
-        }
-        if (joint.name == "left-hip"){
-          if (rotVal < (-90 * degToRad)){
-            joint.rotation.z = -90 * degToRad;
-          }
-          else if (rotVal > (20 * degToRad)){
-            joint.rotation.z = 20 * degToRad;
-          }
-          else{
-            joint.rotation.z = rotVal;
-          }
-        }
-      }
-
-      //NECK LIMITATIONS    
-      if (joint.name == "neck"){
-        if (rotVal < (-35 * degToRad)){
-          joint.rotation.z = -35 * degToRad;
-        }
-        else if (joint.rotation.z > (35 * degToRad)){
-          joint.rotation.z = 35 * degToRad;
-        }
-        else{
-          joint.rotation.z = rotVal;
-        }
-      }
-
-      //LOWER BACK LIMITATIONS    
-      if (joint.name == "lower-back"){
-        if (rotVal < (-35 * degToRad)){
-          joint.rotation.z = -35 * degToRad;
-        }
-        else if (rotVal > (35 * degToRad)){
-          joint.rotation.z = 35 * degToRad;
-        }
-        else{
-          joint.rotation.z = rotVal;
-        }
-      }
-    }
-
-    update();
-    $("#z-rot").val("")
-  }
-
-    function update(){
+  else{
     if (SELECTED){
-      $("#joint").html(SELECTED.name);
-
-      var x_rot = SELECTED._rotation._x / degToRad;
-      $("#x-rot").attr("placeholder", x_rot.toFixed(2));
-      var y_rot = SELECTED._rotation._y / degToRad;
-      $("#y-rot").attr("placeholder", y_rot.toFixed(2));
-      var z_rot = SELECTED._rotation._z / degToRad;
-      $("#z-rot").attr("placeholder", z_rot.toFixed(2));
-    }else{
-      $("#joint").html("none");
-
-      $("#x-rot").attr("placeholder","n/a");
-      $("#y-rot").attr("placeholder","n/a");
-      $("#z-rot").attr("placeholder","n/a");
+      SELECTED.children[0].material = material;
+      LAST_SELECTED = SELECTED.id;
     }
+    SELECTED = scene.getObjectByName("root",true);
+    SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
+      { color: 0x5b6b7a, opacity: 1 } ); 
   }
+}
 
-  function toggleInfo(){
-    if ($("#information").hasClass("hide")){
-      if (!$("#help").hasClass("hide")){
-        $("#help").addClass("hide");
+//handles joint selection
+function onDocumentMouseUp( event ) {
+  mouseDown = false;
+  var joint_selector, object_selector;
+  if (effectorSelected){
+    
+    effectorSelected = false;
+    effector_pt[0].children[0].material = new THREE.MeshPhongMaterial( 
+    { color: 0x077684, opacity: 1 } ); 
+    
+  }
+  else if (!ALT){
+    event.preventDefault();
+    mouse.x = (event.clientX/$("canvas").width()) *2 -1; 
+    mouse.y = -((event.clientY- 42)/$("canvas").height()) *2 +1; 
+
+    var vector = new THREE.Vector3(mouse.x, mouse.y, .5);
+    projector.unprojectVector(vector, camera);
+    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+    if (male){
+        joint_selector = joints;
+        object_selector = objects;
+      }else{
+        joint_selector = joints_female;
+        object_selector = objects_female;
       }
-      $("#information").removeClass("hide");
-    }else{
-      $("#information").addClass("hide");
-    }
-  }
+    var intersected = ray.intersectObjects(object_selector, true);
+      
+    if (intersected.length > 0){
 
-  function toggleHelp(){
-    if ($("#help").hasClass("hide")){
-      if (!$("#information").hasClass("hide")){
-        $("#information").addClass("hide");
+      var joint = contains(joint_selector, intersected);
+      if (SELECTED){
+        if (SELECTED != intersected[0].object.parent){
+          if (joint){
+
+          SELECTED.children[0].material = material;
+          SELECTED = joint;
+          SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
+      { color: 0x5b6b7a, opacity: 1 } ); 
+          }
+        }
       }
-      $("#help").removeClass("hide");
-    }else{
-      $("#help").addClass("hide");
+      else{
+        if (joint){
+          SELECTED = joint;
+          SELECTED.children[0].material = new THREE.MeshPhongMaterial( 
+      { color: 0x5b6b7a, opacity: 1 } ); 
+        }
+      }
     }
   }
+}
+
+//Checks if a joint has been selected
+function contains(array, obj_array){
+  for (var i=0; i<array.length; i++){
+    for(var j=0; j<obj_array.length; j++){
+      if (array[i] == obj_array[j].object.parent){
+        return obj_array[j].object.parent;
+      }
+    }
+  } 
+  return false;
+}
 
 
